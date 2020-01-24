@@ -9,12 +9,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { HomeComponent } from './home/home.component';
 import { SenderComponent } from './role/sender/sender.component';
+import { ReceiverComponent } from './role/receiver/receiver.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    SenderComponent
+    SenderComponent,
+    ReceiverComponent
   ],
   imports: [
     BrowserModule,
