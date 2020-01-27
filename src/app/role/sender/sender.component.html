@@ -1,8 +1,18 @@
-<mat-card>
-    <mat-card-header>
-        <mat-card-title>Sender Page</mat-card-title>
-    </mat-card-header>
-    <mat-card-actions>
-        <button mat-raised-button routerLink=''>Back</button>
-    </mat-card-actions>
-</mat-card>
+<div class="container">
+    <p style="font-weight: bold">Channel : {{ idChannel }}</p>
+</div>
+
+<mat-grid-list cols="5" gutterSize="10px">
+    <mat-grid-tile style="background: aqua">1</mat-grid-tile>
+    <mat-grid-tile style="background: aqua">2</mat-grid-tile>
+    <mat-grid-tile style="background: aqua">3</mat-grid-tile>
+    <mat-grid-tile style="background: aqua">4</mat-grid-tile>
+    <mat-grid-tile style="background: aqua">5</mat-grid-tile>
+    <mat-grid-tile style="background: aqua">6</mat-grid-tile>
+</mat-grid-list>
+
+<div class="buttoncontainer">
+    <button mat-raised-button>Upload</button><span class="spacer"></span>
+    <button mat-raised-button routerLink=''>Back</button>
+</div>
+

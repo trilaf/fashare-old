@@ -2,3 +2,13 @@
 
 html, body { height: auto; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: #ECECEC; }
+span.spacing {
+    flex: auto;
+}
+
+span.divider {
+    width: 20px;
+}
+.spacer {margin-right: 10px;}
+.buttoncontainer {margin-top: 20px;}
+.container {background: rgb(233, 233, 233); width: auto; color: black; margin-bottom: 15px; padding: 5px;}
