@@ -3,7 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebase: {
+    apiKey: 'AIzaSyA06oj807g310kX1lCmg-0PTnTOpokLWFc',
+    authDomain: 'fashare-trilaf.firebaseapp.com',
+    databaseURL: 'https://fashare-trilaf.firebaseio.com/',
+    projectId: 'fashare-trilaf',
+    storageBucket: 'fashare-trilaf.appspot.com',
+    messagingSenderId: '1031178406350'
+  }
 };
 
 /*
