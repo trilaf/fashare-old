@@ -14,9 +14,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HomeComponent } from './home/home.component';
 import { SenderComponent } from './role/sender/sender.component';
 import { ReceiverComponent } from './role/receiver/receiver.component';
+
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -37,9 +40,10 @@ import { ReceiverComponent } from './role/receiver/receiver.component';
     MatIconModule,
     AngularFireModule.initializeApp(environment.firebase, 'fashare-trilaf'),
     AngularFireStorageModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    MatSnackBarModule
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
