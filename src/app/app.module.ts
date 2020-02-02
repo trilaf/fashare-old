@@ -15,9 +15,11 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 import { HomeComponent } from './home/home.component';
 import { SenderComponent } from './role/sender/sender.component';
 import { ReceiverComponent } from './role/receiver/receiver.component';
+import { DisconnectDialog } from './dialog-data/disconnect-dialog/disconnect-dialog.component';
 
 import { CookieService } from 'ngx-cookie-service';
 
@@ -26,7 +28,8 @@ import { CookieService } from 'ngx-cookie-service';
     AppComponent,
     HomeComponent,
     SenderComponent,
-    ReceiverComponent
+    ReceiverComponent,
+    DisconnectDialog
   ],
   imports: [
     BrowserModule,
@@ -41,9 +44,11 @@ import { CookieService } from 'ngx-cookie-service';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
     AngularFirestoreModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule
   ],
   providers: [CookieService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [DisconnectDialog]
 })
 export class AppModule { }

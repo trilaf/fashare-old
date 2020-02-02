@@ -27,6 +27,7 @@ export class SenderComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.senderServ.checkCookie();
     this.appComponent.pageTitle = 'Sender Page';
   }
 

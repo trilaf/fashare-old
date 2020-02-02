@@ -5,6 +5,9 @@ import { Observable, merge } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { DisconnectDialog } from '../dialog-data/disconnect-dialog/disconnect-dialog.component';
+import { Router } from '@angular/router';
 
 export interface Data {
     name: string,
@@ -21,22 +24,30 @@ export class SenderService {
   id: string;
   detailData: Data;
   fileList: Data[];
+  isCookieExist: boolean;
 
   constructor(
    private fstore: AngularFirestore,
    private storage: AngularFireStorage,
    private cookie: CookieService,
-   private snackbar: MatSnackBar
+   private snackbar: MatSnackBar,
+   private dialog: MatDialog,
+   private router: Router
   ) {}
 
   getChannelId() {
     return this.id;
   }
 
+  checkCookie() {
+    if(this.cookie.check('CHNL_ID') == true) {this.isCookieExist = true}
+    else {this.isCookieExist = false}
+  }
+
   setCookiesExpiredInHour(): Date {
     let date = new Date();
     let hour = date.getHours();
-    date.setHours(hour + 8);
+    date.setHours(hour + 1);
     return date;
   }
 
@@ -49,6 +60,7 @@ export class SenderService {
     if(this.id === undefined || null) {
       await this.createCollection();
       this.cookie.set('CHNL_ID', this.id, await this.setCookiesExpiredInHour(), '/');
+      this.isCookieExist = true;
     }
 
     const file = event.target.files[0];
@@ -85,6 +97,19 @@ export class SenderService {
         } as Data;
       });
     });   
+  }
+
+  disconnectChannel() {
+
+  }
+
+  openDisconnectDialog() {
+    const dialogRef = this.dialog.open(DisconnectDialog);
+    dialogRef.afterClosed().subscribe(result => {
+      if(result == true) {
+        this.router.navigate(['']);
+      }
+    })
   }
 
 }

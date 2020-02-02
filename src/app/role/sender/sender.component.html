@@ -16,7 +16,7 @@
 <div class="buttoncontainer">
     <button mat-raised-button (click)="fileUpload.click()">Upload</button>
     <input #fileUpload style="display: none;" type="file" (change)="uploadFile($event)"><span class="spacer"></span>
-    <button mat-raised-button routerLink=''>Back</button><span class="spacer"></span>
-    <button (click)="senderServ.checkCookie()">Check Cookie</button>
+    <button *ngIf="!senderServ.isCookieExist" mat-raised-button routerLink="">Back</button>
+    <button *ngIf="senderServ.isCookieExist" mat-raised-button color="warn" (click)="senderServ.openDisconnectDialog()">Disconnect</button>
 </div>
 
