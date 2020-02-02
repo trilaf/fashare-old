@@ -5,12 +5,12 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyA06oj807g310kX1lCmg-0PTnTOpokLWFc',
-    authDomain: 'fashare-trilaf.firebaseapp.com',
-    databaseURL: 'https://fashare-trilaf.firebaseio.com/',
-    projectId: 'fashare-trilaf',
-    storageBucket: 'fashare-trilaf.appspot.com',
-    messagingSenderId: '1031178406350'
+    apiKey: 'api-key',
+    authDomain: 'project-id.firebaseapp.com',
+    databaseURL: 'https://project-id.firebaseio.com/',
+    projectId: 'project-id',
+    storageBucket: 'project-id.appspot.com',
+    messagingSenderId: 'sender-id'
   }
 };
 

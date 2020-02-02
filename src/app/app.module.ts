@@ -38,7 +38,7 @@ import { CookieService } from 'ngx-cookie-service';
     MatDividerModule,
     MatListModule,
     MatIconModule,
-    AngularFireModule.initializeApp(environment.firebase, 'fashare-trilaf'),
+    AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
     AngularFirestoreModule,
     MatSnackBarModule
