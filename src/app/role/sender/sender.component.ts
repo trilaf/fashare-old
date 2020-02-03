@@ -14,7 +14,7 @@ export class SenderComponent implements OnInit {
 
   constructor(
     private appComponent: AppComponent,
-    private senderServ: SenderService
+    public senderServ: SenderService
   ) {}
 
   async uploadFile(event) {
