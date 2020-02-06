@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
     if(this.cookie.check('CHNL_ID') == true) {
       this.senderServ.id = this.cookie.get('CHNL_ID');
       this.senderServ.readFileList();
-      this.snackbar.open('Continuing Session', 'OK', {duration: 5000})
+      this.snackbar.open('Resume Session', 'OK', {duration: 5000})
       this.router.navigate(['/sender']);
     }
   }

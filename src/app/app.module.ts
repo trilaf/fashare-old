@@ -16,6 +16,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
+import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
 import { SenderComponent } from './role/sender/sender.component';
 import { ReceiverComponent } from './role/receiver/receiver.component';
@@ -45,7 +46,8 @@ import { CookieService } from 'ngx-cookie-service';
     AngularFireStorageModule,
     AngularFirestoreModule,
     MatSnackBarModule,
-    MatDialogModule
+    MatDialogModule,
+    HttpClientModule
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],
