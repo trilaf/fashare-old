@@ -12,16 +12,7 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpRequest } from '@angular/common/http';
 import { UploadingSnackbar } from '../snackbar-data/uploading-snackbar/uploading-snackbar.component';
 import { SnackbarService } from './snackbar.service';
-
-export interface Data {
-    name: string,
-    size: number,
-    url: any
-}
-
-export interface fileList {
-  fileList: any;
-}
+import { Data } from '../models/fashare-models';
 
 @Injectable({
   providedIn: 'root'
