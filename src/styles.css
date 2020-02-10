@@ -12,3 +12,6 @@ span.divider {
 .spacer {margin-right: 10px;}
 .buttoncontainer {margin-top: 20px;}
 .container {background: rgb(251, 251, 251); width: auto; color: black; margin-bottom: 5px; padding: 5px;}
+.mat-tooltip.biggerfont {
+    font-size: 13px;
+}

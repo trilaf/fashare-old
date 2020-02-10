@@ -2,7 +2,7 @@
     <p style="font-weight: bold">Channel : {{ senderServ.id }}</p>
 </div>
 
-<mat-card *ngIf="senderServ.id === undefined || null; else list" style="text-align: center;">No File Uploaded</mat-card>
+<mat-card *ngIf="senderServ.fileList.length === 0; else list" style="text-align: center;">No File Uploaded</mat-card>
 <ng-template #list>
 <mat-list style="background-color: white">
     <mat-list-item *ngFor="let list of senderServ.fileList">
@@ -14,11 +14,11 @@
 </ng-template>
 
 <div class="buttoncontainer">
-    <button mat-raised-button (click)="fileUpload.click()">Upload</button>
+    <button mat-fab matTooltip="Upload" matTooltipClass="biggerfont" color="primary" (click)="fileUpload.click()" [disabled]="senderServ.isUploading"><mat-icon>cloud_upload</mat-icon></button>
     <input #fileUpload style="display: none;" type="file" (change)="uploadFile($event)"><span class="spacer"></span>
-    <button *ngIf="!senderServ.isCookieExist" mat-raised-button routerLink="">Back</button>
-    <button *ngIf="senderServ.isCookieExist" mat-raised-button color="warn" (click)="senderServ.openDisconnectDialog()">End Session</button>
+    <button *ngIf="!senderServ.isCookieExist" mat-fab matTooltip="Back" matTooltipClass="biggerfont" routerLink=""><mat-icon>arrow_back</mat-icon></button>
+    <button *ngIf="senderServ.isCookieExist" mat-fab matTooltip="End Session" matTooltipClass="biggerfont" color="warn" (click)="senderServ.openDisconnectDialog()" [disabled]="senderServ.isUploading"><mat-icon>power_settings_new</mat-icon></button>
     <span class="spacer"></span>
-    <!--<button mat-raised-button (click)="senderServ.checkFileList()">Check File List</button>-->
+    <button mat-raised-button (click)="senderServ.testProgressDialog()">Test Progress Dialog</button>
 </div>
 

@@ -23,9 +23,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     if(this.cookie.check('CHNL_ID') == true) {
+      this.senderServ.isUploading = true;
       this.senderServ.id = this.cookie.get('CHNL_ID');
-      this.senderServ.readFileList();
-      this.snackbar.open('Resume Session', 'OK', {duration: 5000})
+      this.snackbar.open('Checking Session...')
+      this.senderServ.readFileList('check');
       this.router.navigate(['/sender']);
     }
   }
