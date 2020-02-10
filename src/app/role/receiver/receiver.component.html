@@ -1,8 +1,9 @@
-<mat-card>
-        <mat-card-header>
-            <mat-card-title>Receiver Page</mat-card-title>
-        </mat-card-header>
-        <mat-card-actions>
-            <button mat-raised-button routerLink=''>Back</button>
-        </mat-card-actions>
-    </mat-card>
+<div class="container centertext">
+    <p *ngIf="receiverServ.id === undefined || null; else connected">Not Connected</p>
+    <ng-template #connected>
+        <p>Connected to {{ receiverServ.id }}</p>
+    </ng-template>
+</div>
+<div class="buttoncontainer">
+    <button mat-raised-button color="primary">Connect</button>
+</div>
