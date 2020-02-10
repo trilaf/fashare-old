@@ -77,10 +77,6 @@ export class SenderService {
     this.id = this.fstore.createId();
   }
 
-  testProgressDialog() {
-    this.snackbar.openFromComponent(UploadingSnackbar);
-  }
-
   async uploadFile(event) {
     let downloadURL;
     this.isUploading = true;

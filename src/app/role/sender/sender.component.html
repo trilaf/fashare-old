@@ -19,6 +19,5 @@
     <button *ngIf="!senderServ.isCookieExist" mat-fab matTooltip="Back" matTooltipClass="biggerfont" routerLink=""><mat-icon>arrow_back</mat-icon></button>
     <button *ngIf="senderServ.isCookieExist" mat-fab matTooltip="End Session" matTooltipClass="biggerfont" color="warn" (click)="senderServ.openDisconnectDialog()" [disabled]="senderServ.isUploading"><mat-icon>power_settings_new</mat-icon></button>
     <span class="spacer"></span>
-    <button mat-raised-button (click)="senderServ.testProgressDialog()">Test Progress Dialog</button>
 </div>
 
