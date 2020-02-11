@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
@@ -20,14 +21,19 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { HttpClientModule } from '@angular/common/http';
+import { MatInputModule } from '@angular/material/input';
+
 import { HomeComponent } from './home/home.component';
 import { SenderComponent } from './role/sender/sender.component';
 import { ReceiverComponent } from './role/receiver/receiver.component';
+
+import { ConnectChannelDialog } from './dialog-data/connect-channel-dialog/connect-channel-dialog.component';
 import { DisconnectDialog } from './dialog-data/disconnect-dialog/disconnect-dialog.component';
 import { UploadingSnackbar } from './snackbar-data/uploading-snackbar/uploading-snackbar.component';
 
 import { CookieService } from 'ngx-cookie-service';
 import { SenderService } from './services/sender.service';
+import { DialogService } from './services/dialog.service';
 
 @NgModule({
   declarations: [
@@ -36,12 +42,15 @@ import { SenderService } from './services/sender.service';
     SenderComponent,
     ReceiverComponent,
     DisconnectDialog,
+    ConnectChannelDialog,
     UploadingSnackbar
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatToolbarModule,
     MatButtonModule,
     MatCardModule,
@@ -54,17 +63,20 @@ import { SenderService } from './services/sender.service';
     MatSnackBarModule,
     MatDialogModule,
     MatProgressBarModule,
+    MatInputModule,
+    MatTooltipModule,
     HttpClientModule,
-    AngularFireFunctionsModule,
-    MatTooltipModule
+    AngularFireFunctionsModule
   ],
   providers: [
     CookieService,
-    SenderService
+    SenderService,
+    DialogService
   ],
   bootstrap: [AppComponent],
   entryComponents: [
     DisconnectDialog,
+    ConnectChannelDialog,
     UploadingSnackbar
   ]
 })
