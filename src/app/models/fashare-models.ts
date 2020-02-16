@@ -7,3 +7,7 @@ export interface Data {
 export interface fileList {
   fileList: any;
 }
+
+export interface shortChannelID {
+  id: string;
+}

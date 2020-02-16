@@ -17,7 +17,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { HttpClientModule } from '@angular/common/http';
@@ -29,6 +29,7 @@ import { ReceiverComponent } from './role/receiver/receiver.component';
 
 import { ConnectChannelDialog } from './dialog-data/connect-channel-dialog/connect-channel-dialog.component';
 import { DisconnectDialog } from './dialog-data/disconnect-dialog/disconnect-dialog.component';
+import { CreateChannelDialog } from './dialog-data/create-channel-dialog/create-channel-dialog.component';
 import { UploadingSnackbar } from './snackbar-data/uploading-snackbar/uploading-snackbar.component';
 
 import { CookieService } from 'ngx-cookie-service';
@@ -43,6 +44,7 @@ import { DialogService } from './services/dialog.service';
     ReceiverComponent,
     DisconnectDialog,
     ConnectChannelDialog,
+    CreateChannelDialog,
     UploadingSnackbar
   ],
   imports: [
@@ -71,12 +73,17 @@ import { DialogService } from './services/dialog.service';
   providers: [
     CookieService,
     SenderService,
-    DialogService
+    DialogService,
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {
+      horizontalPosition: 'left',
+      verticalPosition: 'bottom'
+    }}
   ],
   bootstrap: [AppComponent],
   entryComponents: [
     DisconnectDialog,
     ConnectChannelDialog,
+    CreateChannelDialog,
     UploadingSnackbar
   ]
 })

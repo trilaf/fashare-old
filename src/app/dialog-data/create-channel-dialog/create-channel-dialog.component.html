@@ -1,0 +1,10 @@
+<form>
+    <mat-form-field>
+        <input matInput placeholder="Insert Channel Name" [formControl]="insertChannelName">
+        <mat-error *ngIf="insertChannelName.hasError('required')">Channel Name <strong>required</strong></mat-error>
+    </mat-form-field>
+</form>
+<mat-dialog-actions align="center">
+        <button mat-button color="primary" (click)="createChannelName()" [mat-dialog-close]="true" [disabled]="insertChannelName.hasError('required') == true">OK</button>
+        <button mat-button mat-dialog-close color="warn">Cancel</button>
+</mat-dialog-actions>

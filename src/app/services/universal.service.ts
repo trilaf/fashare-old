@@ -1,0 +1,27 @@
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UniversalService {
+
+  constructor() { }
+
+  fileSizeConversion(size): string {
+    let converted: string;
+    let kB: number, mB: number;
+    if(size > 1024) {
+      kB = size / 1024;
+      if(kB > 1024) {
+        mB = kB / 1024;
+        converted = mB.toFixed(2) + ' MB';
+      } else {
+        converted = kB.toFixed(2) + ' kB';
+      }
+    } else {
+      converted = size + ' bytes';
+    }
+    return converted;
+  }
+
+}

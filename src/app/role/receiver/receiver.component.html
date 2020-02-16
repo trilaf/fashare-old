@@ -1,10 +1,29 @@
 <div class="container centertext">
-    <p *ngIf="receiverServ.id === undefined || null; else connected">Not Connected</p>
+    <p *ngIf="!receiverServ.isConnected; else connected">Not Connected</p>
     <ng-template #connected>
-        <p>Connected to {{ receiverServ.id }}</p>
+        <p>Connected to <strong>{{ receiverServ.idChannel }}</strong></p>
     </ng-template>
 </div>
-<div class="buttoncontainer">
-    <button mat-raised-button color="primary" (click)="receiverServ.openDialogInsertChannelID()">Connect</button><span class="spacer"></span>
-    <button mat-raised-button color="warn" routerLink="">Back</button>
+<mat-card *ngIf="receiverServ.isConnected && (receiverServ.fileList.length === 0); else fileExist" style="text-align: center">No File</mat-card>
+<ng-template #fileExist>
+    <mat-list style="background-color: white" *ngIf="receiverServ.fileList.length !== 0">
+        <mat-list-item *ngFor="let file of receiverServ.fileList">
+            <mat-icon matListIcon>description</mat-icon>
+            <h6 matLine>{{ file.name }}</h6>
+            <div class="dl-btn-wrapper">
+                <a mat-icon-button color="primary" matTooltip="Download" target="_blank" matTooltipClass="biggerfont" [href]="file.url">
+                    <mat-icon>cloud_download</mat-icon>
+                </a>
+            </div>
+            <p matLine>{{ universalServ.fileSizeConversion(file.size) }}</p>
+            <mat-divider></mat-divider>
+        </mat-list-item>
+    </mat-list>
+</ng-template>
+<div class="buttoncontainer fly">
+    <button mat-fab matTooltip="Disconnect" matTooltipClass="biggerfont" color="warn" *ngIf="receiverServ.isConnected; else noId" (click)="receiverServ.disconnectChannel()"><mat-icon>power_settings_new</mat-icon></button>
+    <ng-template #noId>
+        <button mat-fab matTooltip="Connect" matTooltipClass="biggerfont" color="primary" (click)="receiverServ.openDialogInsertChannelID()"><mat-icon>insert_link</mat-icon></button><span class="spacer"></span>
+        <button mat-fab matTooltip="Back" matTooltipClass="biggerfont" color="warn" routerLink=""><mat-icon>arrow_back</mat-icon></button>
+    </ng-template>
 </div>

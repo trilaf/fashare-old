@@ -16,3 +16,15 @@ span.divider {
 .mat-tooltip.biggerfont {
     font-size: 13px;
 }
+.dl-btn-wrapper {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px ridge rgb(223, 223, 223);
+    padding-left: 10px;
+}
+
+.buttoncontainer.fly {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+}

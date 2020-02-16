@@ -1,23 +1,31 @@
-<div class="container" *ngIf="senderServ.id !== undefined || null">
-    <p style="font-weight: bold">Channel : {{ senderServ.id }}</p>
+<div class="container" *ngIf="senderServ.id !== undefined || null; else idNotSet">
+    <p style="font-weight: bold">Channel : {{ senderServ.simpleChannelID }}</p>
 </div>
+<ng-template #idNotSet>
+    <mat-card style="text-align: center">Channel Not Set</mat-card>
+</ng-template>
 
-<mat-card *ngIf="senderServ.fileList.length === 0; else list" style="text-align: center;">No File Uploaded</mat-card>
+<mat-card *ngIf="(senderServ.fileList.length === 0) && (senderServ.id !== undefined || null); else list" style="text-align: center;">No File Uploaded</mat-card>
 <ng-template #list>
-<mat-list style="background-color: white">
+<mat-list *ngIf="senderServ.fileList.length > 0" style="background-color: white">
     <mat-list-item *ngFor="let list of senderServ.fileList">
         <mat-icon mat-list-icon>description</mat-icon>
         <h4 mat-line>{{ list.name }}</h4>
-        <p mat-line>{{ list.size }} bytes</p>
+        <p mat-line>{{ universalServ.fileSizeConversion(list.size) }}</p>
+        <mat-divider></mat-divider>
     </mat-list-item>
 </mat-list>
 </ng-template>
 
-<div class="buttoncontainer">
-    <button mat-fab matTooltip="Upload" matTooltipClass="biggerfont" color="primary" (click)="fileUpload.click()" [disabled]="senderServ.isUploading"><mat-icon>cloud_upload</mat-icon></button>
-    <input #fileUpload style="display: none;" type="file" (change)="uploadFile($event)"><span class="spacer"></span>
-    <button *ngIf="!senderServ.isCookieExist" mat-fab matTooltip="Back" matTooltipClass="biggerfont" routerLink=""><mat-icon>arrow_back</mat-icon></button>
-    <button *ngIf="senderServ.isCookieExist" mat-fab matTooltip="End Session" matTooltipClass="biggerfont" color="warn" (click)="senderServ.openDisconnectDialog()" [disabled]="senderServ.isUploading"><mat-icon>power_settings_new</mat-icon></button>
-    <span class="spacer"></span>
+<div class="buttoncontainer fly">
+    <button  *ngIf="senderServ.id == undefined || null; else idCreated" mat-fab matTooltip="Start" matTooltipClass="biggerfont" (click)="senderServ.openCreateChannelDialog()" color="primary"><mat-icon>power_settings_new</mat-icon></button><span class="spacer"></span>
+    <ng-template #idCreated>
+        <button mat-fab matTooltip="Upload" matTooltipClass="biggerfont" color="primary" (click)="fileUpload.click()" [disabled]="senderServ.isUploading"><mat-icon>cloud_upload</mat-icon></button>
+        <input #fileUpload style="display: none;" type="file" (change)="uploadFile($event)">
+    </ng-template>
+    <button *ngIf="!senderServ.isCookieExist; else cookieExist" mat-fab matTooltip="Back" matTooltipClass="biggerfont" routerLink=""><mat-icon>arrow_back</mat-icon></button>
+    <ng-template #cookieExist>
+        <button *ngIf="senderServ.isCookieExist" mat-fab matTooltip="End Session" matTooltipClass="biggerfont" color="warn" (click)="senderServ.openDisconnectDialog()" [disabled]="senderServ.isUploading"><mat-icon>highlight_off</mat-icon></button>
+    </ng-template>
 </div>
 

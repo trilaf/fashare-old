@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppComponent } from '../../app.component';
 import { SenderService } from '../../services/sender.service';
+import { UniversalService } from 'src/app/services/universal.service';
 
 @Component({
   selector: 'app-sender',
@@ -14,7 +15,8 @@ export class SenderComponent implements OnInit {
 
   constructor(
     private appComponent: AppComponent,
-    public senderServ: SenderService
+    public senderServ: SenderService,
+    public universalServ: UniversalService
   ) {}
 
   async uploadFile(event) {

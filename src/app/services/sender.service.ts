@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFireFunctions } from '@angular/fire/functions';
-import { Observable, merge } from 'rxjs';
+import { Observable, merge, Subscription } from 'rxjs';
 import { finalize, map, last } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -12,7 +12,9 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpRequest } from '@angular/common/http';
 import { UploadingSnackbar } from '../snackbar-data/uploading-snackbar/uploading-snackbar.component';
 import { SnackbarService } from './snackbar.service';
-import { Data } from '../models/fashare-models';
+import { Data, shortChannelID } from '../models/fashare-models';
+import { CreateChannelDialog } from '../dialog-data/create-channel-dialog/create-channel-dialog.component';
+import { DialogService } from './dialog.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,11 +23,13 @@ export class SenderService {
 
   private filesCollection: AngularFirestoreCollection<Data>;
   id: string;
+  simpleChannelID: string;
   detailData: Data;
   fileList: Data[] = [];
   isCookieExist: boolean;
   percentResult = '0';
   isUploading: boolean = false;
+  firestoreTask: Subscription
 
   constructor(
    private fstore: AngularFirestore,
@@ -36,20 +40,40 @@ export class SenderService {
    private router: Router,
    private http: HttpClient,
    private functions: AngularFireFunctions,
-   private snackbarServ: SnackbarService
+   private snackbarServ: SnackbarService,
+   private dialogServ: DialogService
   ) {}
 
   getChannelId() {
     return this.id;
   }
 
-  testCloudFunctions() {
-    let url = 'https://us-central1-fashare-trilaf.cloudfunctions.net/helloWorld';
-    this.http.post(url, '').toPromise().then(res => {
-      console.log(res);
-    }).catch(err => {
-      console.log(err);
-    });
+  checkShortID(shortID: string) {
+    this.snackbar.open('Checking channel name...');
+    this.fstore.firestore.collection('_shortID').doc(shortID).get().then(data => {
+      if(data.get('id') == undefined) {
+        this.snackbar.open('Creating channel...');
+        this.writeShortID(shortID);
+      } else {
+        this.snackbar.open('Channel name is already taken', 'OK', {duration: 5000});
+      }
+    }, err => this.snackbar.open(`Error: ${err}`));
+  }
+
+  writeShortID(shortID: string) {
+    let randomRealID = {
+      'id': this.fstore.createId()
+    };
+    this.fstore.collection('_shortID').doc<shortChannelID>(shortID).set(randomRealID).then(() => {
+      this.id = randomRealID.id;
+      this.simpleChannelID = shortID;
+      this.cookie.set('CHNL_ID', this.id, 3650, '/');
+      this.cookie.set('CHNL_NAME', shortID, 3650, '/');
+      this.isCookieExist = true;
+      this.snackbar.open('Channel successfully created', 'OK', {duration: 5000});
+    }, err => {
+      this.snackbar.open(`Error: ${err}`, 'OK', {duration: 5000});
+    })
   }
 
   checkCookie() {
@@ -73,11 +97,6 @@ export class SenderService {
     this.isUploading = true;
 
     this.snackbar.openFromComponent(UploadingSnackbar);
-    if(this.id === undefined || null) {
-      await this.createCollection();
-      this.cookie.set('CHNL_ID', this.id, 3650, '/');
-      this.isCookieExist = true;
-    }
 
     const file = event.target.files[0];
     const fileRef = this.storage.storage.ref(this.id).child(event.target.files[0].name);
@@ -113,7 +132,7 @@ export class SenderService {
   }
 
   readFileList(type?: string) {
-    this.fstore.collection<Data>(this.id).snapshotChanges().subscribe(data => {
+    this.firestoreTask = this.fstore.collection<Data>(this.id).snapshotChanges().subscribe(data => {
       this.fileList = data.map(e => {
         return {
           id: e.payload.doc.id,
@@ -130,21 +149,36 @@ export class SenderService {
 
   disconnectChannel() {
     this.snackbar.open('Disconnecting...', '');
-    this.deleteFileStorage()
-    .then(() => {this.deleteCollectionAtPath(this.id, 'direct')})
-    .catch(err => {
-      console.log(err);
-      this.snackbar.open(`Failed: ${err}`, 'CLOSE');
-    });
+    if(this.fileList.length === 0) {
+      this.deleteCollectionAtPath('_shortID/' + this.simpleChannelID, 'direct', 'done');
+    } else {
+      this.deleteFileStorage()
+      .then(() => {
+        this.deleteCollectionAtPath(this.id, 'direct').then(() => {
+          this.deleteCollectionAtPath('_shortID/' + this.simpleChannelID, 'direct', 'done');
+        }).catch(err => {
+          console.log(err);
+          this.snackbar.open(`Failed: ${err}`, 'X');
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        this.snackbar.open(`Failed: ${err}`, 'X');
+      });
+    }
   }
 
-  cleanUpData() {
-    console.log('Cleaning Up Data...');
-    this.id = undefined;
-    this.fileList = [];
-    this.isCookieExist = false;
-    this.cookie.delete('CHNL_ID');
-    console.log('Cleaning Done');
+  cleanUpData(type?: string) {
+    if(type == 'done') {
+      console.log('Cleaning Up Data...');
+      this.id = undefined;
+      this.firestoreTask.unsubscribe();
+      this.fileList = [];
+      this.isCookieExist = false;
+      this.cookie.delete('CHNL_ID');
+      this.cookie.delete('CHNL_NAME');
+      console.log('Cleaning Done');
+    }
   }
 
   openDisconnectDialog() {
@@ -156,20 +190,32 @@ export class SenderService {
     })
   }
 
-  deleteCollectionAtPath(path, type) {
-    var deleteFn = this.functions.functions.httpsCallable('recursiveDelete');
-    deleteFn({path: path, type: type})
-      .then(() => {
-        if(type == 'direct') {
-          this.snackbar.open('Disconnected', 'OK', {duration: 5000});
-        }
-        this.cleanUpData();
-      })
-      .catch(() => {
-        if(type == 'direct') {
-          this.snackbar.open('Failed to Disconnect', 'OK', {duration: 5000});
-        }
-      })
+  openCreateChannelDialog() {
+    const dialogRef = this.dialog.open(CreateChannelDialog);
+    dialogRef.afterClosed().subscribe(result => {
+      if(result == true) {
+        this.checkShortID(this.dialogServ.newChannelName);
+      }
+    })
+  }
+
+  deleteCollectionAtPath(path, type, cleanUpType?): Promise<any> {
+    return new Promise((resolve, reject) => {
+      var deleteFn = this.functions.functions.httpsCallable('recursiveDelete');
+      deleteFn({path: path, type: type})
+        .then(() => {
+          if(cleanUpType == 'done') {
+            this.snackbar.open('Disconnected', 'OK', {duration: 5000});
+          }
+          resolve(this.cleanUpData(cleanUpType));
+        })
+        .catch(err => {
+          if(cleanUpType == 'done') {
+            this.snackbar.open('Failed to Disconnect', 'OK', {duration: 5000});
+          }
+          reject(err);
+        })
+    });
   }
 
   deleteFileStorage(): Promise<any> {
