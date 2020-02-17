@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ViewChild, ElementRef } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFireFunctions } from '@angular/fire/functions';
@@ -48,6 +48,22 @@ export class SenderService {
     return this.id;
   }
 
+  checkFileExist(filename): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.fstore.firestore.collection(this.id).where('name', '==', filename).get().then(snapshot => {
+        if(!snapshot.empty) {
+          snapshot.forEach(doc => {
+            if(doc.get('name') == filename) reject();
+            else resolve();
+          });
+        } else resolve();
+      }, err => {
+        console.log(err);
+        reject();
+      })
+    });
+  }
+
   checkShortID(shortID: string) {
     this.snackbar.open('Checking channel name...');
     this.fstore.firestore.collection('_shortID').doc(shortID).get().then(data => {
@@ -94,7 +110,17 @@ export class SenderService {
 
   async uploadFile(event) {
     let downloadURL;
+    let isFileExist: boolean = false;
     this.isUploading = true;
+    await this.checkFileExist(event.target.files[0].name).catch(err => {
+      this.isUploading = false;
+      isFileExist = true;
+      this.snackbar.open('File already exists', 'X', {duration: 5000});
+      return;
+    });
+    if(isFileExist) {
+      return true;
+    }
 
     this.snackbar.openFromComponent(UploadingSnackbar);
 
@@ -172,7 +198,9 @@ export class SenderService {
     if(type == 'done') {
       console.log('Cleaning Up Data...');
       this.id = undefined;
-      this.firestoreTask.unsubscribe();
+      if(this.firestoreTask != undefined) {
+        this.firestoreTask.unsubscribe();
+      }
       this.fileList = [];
       this.isCookieExist = false;
       this.cookie.delete('CHNL_ID');
