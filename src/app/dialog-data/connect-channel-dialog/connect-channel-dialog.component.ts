@@ -16,6 +16,8 @@ export class ConnectChannelDialog {
     ) {}
 
     submitChannelID() {
-        this.dialogServ.idChannel = this.insertChannelID.value;
+        if(this.insertChannelID.valid) {
+            this.dialogServ.idChannel = this.insertChannelID.value;
+        }
     }
 }

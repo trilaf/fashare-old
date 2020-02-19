@@ -12,6 +12,8 @@ export class CreateChannelDialog {
     constructor(private dialogServ: DialogService) {}
 
     createChannelName() {
-        this.dialogServ.newChannelName = this.insertChannelName.value;
+        if(this.insertChannelName.valid) {
+            this.dialogServ.newChannelName = this.insertChannelName.value;
+        }
     }
 }
