@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
       this.senderServ.isUploading = true;
       this.senderServ.id = this.cookie.get('CHNL_ID');
       this.senderServ.simpleChannelID = this.cookie.get('CHNL_NAME');
-      this.snackbar.open('Checking Session...')
+      this.snackbar.open('Checking Session...', '', {duration: 5000});
       this.senderServ.readFileList('check');
       this.router.navigate(['/sender']);
     }

@@ -8,16 +8,16 @@ import { MatDialogRef } from '@angular/material/dialog';
     templateUrl: './connect-channel-dialog.component.html'
 })
 export class ConnectChannelDialog {
-    insertChannelID = new FormControl('', [Validators.required]);
+    insertChannelName = new FormControl('', [Validators.required]);
     dialogRef: MatDialogRef<ConnectChannelDialog>
 
     constructor(
         public dialogServ: DialogService
     ) {}
 
-    submitChannelID() {
-        if(this.insertChannelID.valid) {
-            this.dialogServ.idChannel = this.insertChannelID.value;
+    submitChannelName() {
+        if(this.insertChannelName.valid) {
+            this.dialogServ.idChannel = this.insertChannelName.value;
         }
     }
 }

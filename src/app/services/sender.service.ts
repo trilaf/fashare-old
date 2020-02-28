@@ -2,8 +2,7 @@ import { Injectable, ViewChild, ElementRef } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFireFunctions } from '@angular/fire/functions';
-import { Observable, merge, Subscription } from 'rxjs';
-import { finalize, map, last } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
@@ -65,15 +64,18 @@ export class SenderService {
   }
 
   checkShortID(shortID: string) {
-    this.snackbar.open('Checking channel name...');
+    this.snackbar.open('Checking channel name...', '', {duration: 5000});
     this.fstore.firestore.collection('_shortID').doc(shortID).get().then(data => {
       if(data.get('id') == undefined) {
-        this.snackbar.open('Creating channel...');
+        this.snackbar.open('Creating channel...', '', {duration: 5000});
         this.writeShortID(shortID);
       } else {
-        this.snackbar.open('Channel name is already taken', 'OK', {duration: 5000});
+        this.snackbar.open('Channel name is already taken', 'X', {duration: 5000});
       }
-    }, err => this.snackbar.open(`Error: ${err}`));
+    }, err => {
+      this.snackbar.open(`Failed checking channel name`, 'X', {duration: 5000});
+      console.log(`Failed check channel: ${err}`);
+    });
   }
 
   writeShortID(shortID: string) {
@@ -86,9 +88,10 @@ export class SenderService {
       this.cookie.set('CHNL_ID', this.id, 3650, '/');
       this.cookie.set('CHNL_NAME', shortID, 3650, '/');
       this.isCookieExist = true;
-      this.snackbar.open('Channel successfully created', 'OK', {duration: 5000});
+      this.snackbar.open('Channel successfully created', 'X', {duration: 5000});
     }, err => {
-      this.snackbar.open(`Error: ${err}`, 'OK', {duration: 5000});
+      this.snackbar.open(`Failed creating channel`, 'X', {duration: 5000});
+      console.log(`Failed create channel: ${err}`);
     })
   }
 
@@ -131,7 +134,7 @@ export class SenderService {
     progress => {
       this.snackbarServ.percentResult = ((progress.bytesTransferred / progress.totalBytes) * 100).toFixed(1);
     }, 
-    err => {console.log(`Upload Failed: ${err}`); this.isUploading = false;},
+    err => {console.log(`Upload Failed: ${err}`); this.isUploading = false; this.snackbar.open(`Upload Failed`, 'X', {duration: 5000})},
     async () => {
       await fileRef.getDownloadURL().then(urlDL => {
         downloadURL = urlDL;
@@ -141,16 +144,16 @@ export class SenderService {
           url: downloadURL
         }
       this.uploadFileDetail(detailData);
-      }, err => {console.log(`Upload Failed: ${err}`); this.isUploading = false;})
+      }, err => {console.log(`Upload Failed: ${err}`); this.isUploading = false; this.snackbar.open(`Upload Failed`, 'X', {duration: 5000});})
     })
   }
 
   async uploadFileDetail(detailData) {
     await this.fstore.collection<Data>(this.id).add(detailData).then(
       () => {
-        this.snackbar.open('Upload Success', 'OK', {duration: 5000});
+        this.snackbar.open('Upload Success', 'X', {duration: 5000});
         this.isUploading = false;
-      }, err => {console.log('Push Failed : ' + err); this.snackbar.open('Upload Failed', 'OK', {duration: 5000}); this.isUploading = false;}
+      }, err => {console.log('Push Failed : ' + err); this.snackbar.open('Upload Failed', 'X', {duration: 5000}); this.isUploading = false;}
     ).catch(
       err => {console.log(`Failed: ${err}`); this.isUploading = false;}
     );
@@ -166,15 +169,17 @@ export class SenderService {
         } as Data;
       });
       if(type === 'check') {
-        this.snackbar.open('Session Loaded', 'OK', {duration: 5000});
+        this.snackbar.open('Session Loaded', 'X', {duration: 5000});
         type = '';
         this.isUploading = false;
       }
+    }, err => {
+      this.snackbar.open(`Error: ${err}`, 'X');
     });
   }
 
   disconnectChannel() {
-    this.snackbar.open('Disconnecting...', '');
+    this.snackbar.open('Disconnecting...', '', {duration: 5000});
     if(this.fileList.length === 0) {
       this.deleteCollectionAtPath('_shortID/' + this.simpleChannelID, 'direct', 'done');
     } else {
@@ -233,13 +238,13 @@ export class SenderService {
       deleteFn({path: path, type: type})
         .then(() => {
           if(cleanUpType == 'done') {
-            this.snackbar.open('Disconnected', 'OK', {duration: 5000});
+            this.snackbar.open('Disconnected', 'X', {duration: 5000});
           }
           resolve(this.cleanUpData(cleanUpType));
         })
         .catch(err => {
           if(cleanUpType == 'done') {
-            this.snackbar.open('Failed to Disconnect', 'OK', {duration: 5000});
+            this.snackbar.open('Failed to Disconnect', 'X', {duration: 5000});
           }
           reject(err);
         })

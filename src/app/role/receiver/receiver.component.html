@@ -9,7 +9,7 @@
     <mat-list style="background-color: white" *ngIf="receiverServ.fileList.length !== 0">
         <mat-list-item *ngFor="let file of receiverServ.fileList">
             <mat-icon matListIcon>description</mat-icon>
-            <h6 matLine>{{ file.name }}</h6>
+            <h6 matLine [title]="file.name">{{ file.name }}</h6>
             <div class="dl-btn-wrapper">
                 <a mat-icon-button color="primary" matTooltip="Download" target="_blank" matTooltipClass="biggerfont" [href]="file.url">
                     <mat-icon>cloud_download</mat-icon>

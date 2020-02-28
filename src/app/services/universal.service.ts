@@ -23,5 +23,5 @@ export class UniversalService {
     }
     return converted;
   }
-
+  
 }
