@@ -11,7 +11,7 @@
             <mat-icon matListIcon>description</mat-icon>
             <h6 matLine [title]="file.name">{{ file.name }}</h6>
             <div class="dl-btn-wrapper">
-                <a mat-icon-button color="primary" matTooltip="Download" target="_blank" matTooltipClass="biggerfont" [href]="file.url">
+                <a mat-icon-button color="primary" matTooltip="Download" target="_blank" matTooltipClass="biggerfont" (click)="receiverServ.directDownload(file.url, file.name)">
                     <mat-icon>cloud_download</mat-icon>
                 </a>
             </div>

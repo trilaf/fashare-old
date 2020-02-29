@@ -6,6 +6,8 @@ import { ConnectChannelDialog } from '../dialog-data/connect-channel-dialog/conn
 import { DialogService } from './dialog.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
+import { HttpClient } from 'selenium-webdriver/http';
+import { FileSaverService } from 'ngx-filesaver';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +24,8 @@ export class ReceiverService {
     private fstore: AngularFirestore,
     private dialog: MatDialog,
     private dialogServ: DialogService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private filesaver: FileSaverService
   ) { }
 
   openDialogInsertChannelID() {
@@ -106,15 +109,30 @@ export class ReceiverService {
     })
   }
 
-  directDownload(url) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-    xhr.onload = function(event) {
-      var blob = xhr.response;
-    };
-    xhr.open('GET', url);
-    xhr.setRequestHeader('Access-Control-Allow-Origin', 'a44d163f-0be4-47bd-82fd-dddeff354e10')
-    xhr.send();
+  directDownload(url, fileName?: string) {
+    this.getFile(url).then(res => {
+      this.filesaver.save(res, fileName);
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+
+  getFile(url): Promise<any> {
+    return new Promise((resolve, reject) => {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url);
+      xhr.responseType = 'blob';
+      xhr.onreadystatechange = function(e) {
+        if(xhr.readyState === 4) {
+          if(xhr.status === 200) {
+            resolve(xhr.response);
+          } else {
+            reject(new Error(`Error (${xhr.status}):`));
+          }
+        }
+      };
+      xhr.send();
+    });  
   }
 
 }
