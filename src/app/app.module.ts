@@ -6,6 +6,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireFunctionsModule } from '@angular/fire/functions';
 import { environment } from '../environments/environment';
+import { FileSaverModule } from 'ngx-filesaver';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -53,6 +54,7 @@ import { DialogService } from './services/dialog.service';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    FileSaverModule,
     MatToolbarModule,
     MatButtonModule,
     MatCardModule,
