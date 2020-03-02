@@ -18,9 +18,14 @@ span.divider {
 }
 .dl-btn-wrapper {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     border-left: 1px ridge rgb(223, 223, 223);
     padding-left: 10px;
+    align-content: space-between;
+}
+
+.dl-btn-wrapper > a {
+    margin: 3px;
 }
 
 .buttoncontainer.fly {
