@@ -24,9 +24,9 @@
     </mat-list>
 </ng-template>
 <div class="buttoncontainer fly">
-    <button mat-fab matTooltip="Disconnect" matTooltipClass="biggerfont" color="warn" *ngIf="receiverServ.isConnected; else noId" (click)="receiverServ.disconnectChannel()"><mat-icon>power_settings_new</mat-icon></button>
+    <button mat-fab matTooltip="Disconnect" matTooltipClass="biggerfont" color="warn" [disabled]="receiverServ.isLoading" *ngIf="receiverServ.isConnected; else noId" (click)="receiverServ.disconnectChannel()"><mat-icon>power_settings_new</mat-icon></button>
     <ng-template #noId>
-        <button mat-fab matTooltip="Connect" matTooltipClass="biggerfont" color="primary" (click)="receiverServ.openDialogInsertChannelID()"><mat-icon>insert_link</mat-icon></button><span class="spacer"></span>
-        <button mat-fab matTooltip="Back" matTooltipClass="biggerfont" color="warn" routerLink=""><mat-icon>arrow_back</mat-icon></button>
+        <button mat-fab matTooltip="Connect" matTooltipClass="biggerfont" color="primary" [disabled]="receiverServ.isLoading" (click)="receiverServ.openDialogInsertChannelID()"><mat-icon>insert_link</mat-icon></button><span class="spacer"></span>
+        <button mat-fab matTooltip="Back" matTooltipClass="biggerfont" color="warn" [disabled]="receiverServ.isLoading" routerLink=""><mat-icon>arrow_back</mat-icon></button>
     </ng-template>
 </div>

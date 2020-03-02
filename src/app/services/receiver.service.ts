@@ -14,8 +14,11 @@ import { FileSaverService } from 'ngx-filesaver';
 })
 export class ReceiverService {
 
+  //shortID = Channel Name
+
   idChannel: string;
   isConnected: boolean;
+  isLoading: boolean;
   fileList: Data[] = [];
   dataSubscription: Subscription;
   channelSubscription: Subscription;
@@ -51,12 +54,16 @@ export class ReceiverService {
 
   getRealChannelID(shortID: string) {
     let realChannelID;
+    this.isLoading = true;
     this.snackbar.open('Connecting...');
     this.fstore.firestore.collection('_shortID').doc(shortID).get().then(data => {
       if(data.get('id') == undefined) {
         this.snackbar.open('Channel Not Found', 'OK', {duration: 5000});
+        this.isLoading = false;
       } else {
         this.snackbar.open('Connected', 'OK', {duration: 5000});
+        this.isConnected = true;
+        this.isLoading = false;
         realChannelID = data.get('id');
         this.getFileList(realChannelID, shortID, 'connect');
         this.channelListener(shortID);
@@ -75,7 +82,6 @@ export class ReceiverService {
       });
       if(type == 'connect') {
         this.idChannel = shortID;
-        this.isConnected = true;
         this.snackbar.open('Successfully fetched', 'OK', {duration: 5000});
         type = '';
       }
