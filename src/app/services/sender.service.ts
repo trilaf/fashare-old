@@ -141,7 +141,8 @@ export class SenderService {
         let detailData = {
           name: event.target.files[0].name,
           size: event.target.files[0].size,
-          url: downloadURL
+          url: downloadURL,
+          type: event.target.files[0].type
         }
       this.uploadFileDetail(detailData);
       }, err => {console.log(`Upload Failed: ${err}`); this.isUploading = false; this.snackbar.open(`Upload Failed`, 'X', {duration: 5000});})

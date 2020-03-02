@@ -9,7 +9,7 @@
 <ng-template #list>
 <mat-list *ngIf="senderServ.fileList.length > 0" style="background-color: white">
     <mat-list-item *ngFor="let list of senderServ.fileList">
-        <mat-icon mat-list-icon>description</mat-icon>
+        <mat-icon mat-list-icon>{{ universalServ.getIcon(list.type) }}</mat-icon>
         <h4 mat-line [title]="list.name">{{ list.name }}</h4>
         <p mat-line>{{ universalServ.fileSizeConversion(list.size) }}</p>
         <mat-divider></mat-divider>

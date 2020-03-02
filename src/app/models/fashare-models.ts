@@ -1,7 +1,8 @@
 export interface Data {
     name: string,
     size: number,
-    url: any
+    url: any,
+    type: string
 }
 
 export interface fileList {

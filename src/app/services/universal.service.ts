@@ -23,5 +23,17 @@ export class UniversalService {
     }
     return converted;
   }
+
+  getIcon(fileType: string) {
+    if(fileType.match(/(?=image)\w+/g)) {
+      return 'photo';
+    } else if(fileType.match(/(?=audio)\w+/g)) {
+      return 'music_note';
+    } else if(fileType.match(/(?=video)\w+/g)) {
+      return 'videocam';
+    } else {
+      return 'description';
+    }
+  }
   
 }
