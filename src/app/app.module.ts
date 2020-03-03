@@ -36,6 +36,7 @@ import { UploadingSnackbar } from './snackbar-data/uploading-snackbar/uploading-
 import { CookieService } from 'ngx-cookie-service';
 import { SenderService } from './services/sender.service';
 import { DialogService } from './services/dialog.service';
+import { PlayDialog } from './dialog-data/play-dialog/play-dialog.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { DialogService } from './services/dialog.service';
     DisconnectDialog,
     ConnectChannelDialog,
     CreateChannelDialog,
+    PlayDialog,
     UploadingSnackbar
   ],
   imports: [
@@ -86,6 +88,7 @@ import { DialogService } from './services/dialog.service';
     DisconnectDialog,
     ConnectChannelDialog,
     CreateChannelDialog,
+    PlayDialog,
     UploadingSnackbar
   ]
 })
