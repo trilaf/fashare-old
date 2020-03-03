@@ -112,6 +112,9 @@ export class SenderService {
   }
 
   async uploadFile(event) {
+    if(event.target.files.length === 0) {
+      return;
+    }
     let downloadURL;
     let isFileExist: boolean = false;
     this.isUploading = true;
