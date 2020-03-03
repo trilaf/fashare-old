@@ -1,0 +1,10 @@
+<h6 mat-dialog-title>{{ fileAttr.name }}</h6>
+<mat-dialog-content>
+    <audio *ngIf="fileAttr.type === 'audio'; else video" [src]="fileAttr.url" preload="metadata" controls>File Not Supported</audio>
+    <ng-template #video>
+        <video [src]="fileAttr.url" preload="metadata" controls>File Not Supported</video>
+    </ng-template>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close color="primary">Close</button>
+</mat-dialog-actions>

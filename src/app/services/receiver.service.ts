@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { HttpClient } from 'selenium-webdriver/http';
 import { FileSaverService } from 'ngx-filesaver';
+import { PlayDialog } from '../dialog-data/play-dialog/play-dialog.component';
 
 @Injectable({
   providedIn: 'root'
@@ -64,14 +65,15 @@ export class ReceiverService {
         this.snackbar.open('Connected', 'OK', {duration: 5000});
         this.isConnected = true;
         this.isLoading = false;
+        this.idChannel = shortID;
         realChannelID = data.get('id');
-        this.getFileList(realChannelID, shortID, 'connect');
+        this.getFileList(realChannelID, 'connect');
         this.channelListener(shortID);
       }
     });
   }
 
-  getFileList(idCH: string, shortID: string, type?: string) {
+  getFileList(idCH: string, type?: string) {
     this.snackbar.open('Fetching list of data....');
     this.dataSubscription = this.fstore.collection<Data>(idCH).snapshotChanges().subscribe(data => {
       this.fileList = data.map(e => {
@@ -81,7 +83,6 @@ export class ReceiverService {
         } as Data;
       });
       if(type == 'connect') {
-        this.idChannel = shortID;
         this.snackbar.open('Successfully fetched', 'OK', {duration: 5000});
         type = '';
       }
@@ -139,6 +140,50 @@ export class ReceiverService {
       };
       xhr.send();
     });  
+  }
+
+  getIconForButtonView(fileType: string) {
+    if(fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
+      return 'play_arrow';
+    } else {
+      return 'remove_red_eye';
+    }
+  }
+
+  setHrefButtonView(fileType: string, fileUrl: string) {
+    if(fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
+      return new URL('javascript:void(0)');
+    } else {
+      return fileUrl;
+    }
+  }
+
+  setTargetButtonView(fileType: string) {
+    if(fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
+      return '';
+    } else {
+      return '_blank';
+    }
+  }
+
+  openPlayDialog(fileType, fileName, fileUrl) {
+    if(fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
+      let type;
+      if(fileType.match(/(?=audio)\w+/g)) {
+        type = 'audio';
+      } else if(fileType.match(/(?=video)\w+/g)) {
+        type = 'video';
+      }
+      this.dialog.open(PlayDialog, {
+        data: {
+          name: fileName,
+          url: fileUrl,
+          type: type as string
+        }
+      })
+    } else {
+      return;
+    }
   }
 
 }

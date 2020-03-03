@@ -33,3 +33,7 @@ span.divider {
     right: 20px;
     bottom: 20px;
 }
+
+audio, video {
+    width: 100%;
+}
