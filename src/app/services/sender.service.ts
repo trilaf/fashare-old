@@ -219,12 +219,16 @@ export class SenderService {
   }
 
   openDisconnectDialog() {
-    const dialogRef = this.dialog.open(DisconnectDialog);
-    dialogRef.afterClosed().subscribe(result => {
-      if(result == true) {
-        this.disconnectChannel(); 
-      }
-    })
+    if(this.fileList.length === 0) {
+      this.disconnectChannel();
+    } else {
+      const dialogRef = this.dialog.open(DisconnectDialog);
+      dialogRef.afterClosed().subscribe(result => {
+        if(result == true) {
+          this.disconnectChannel(); 
+        }
+      });
+    }
   }
 
   openCreateChannelDialog() {
@@ -236,7 +240,30 @@ export class SenderService {
     })
   }
 
-  deleteCollectionAtPath(path, type, cleanUpType?): Promise<any> {
+  deleteSingleFile(fileId: string, fileName: string, index) {
+    this.snackbar.open(`Deleting : ${fileName}`, '', {duration: 5000});
+    this.deleteFileStorage('single', fileName).then(() => {
+      this.deleteCollectionAtPath(this.id + '/' + fileId, 'direct', 'single').then(res => {
+        this.fileList.splice(index, 1);
+        this.snackbar.open(res, 'X', {duration: 5000});
+        console.log(this.fileList);
+      }).catch(err => {
+        console.log(err);
+        this.snackbar.open('Failed deleting file', 'X', {duration: 5000});
+      });
+    }).catch(() => {
+      this.deleteCollectionAtPath(this.id + '/' + fileId, 'direct', 'single').then(res => {
+        this.fileList.splice(index, 1);
+        this.snackbar.open(res, 'X', {duration: 5000});
+        console.log(this.fileList);
+      }).catch(err => {
+        console.log(err);
+        this.snackbar.open('Failed deleting file', 'X', {duration: 5000});
+      });
+    });
+  }
+
+  deleteCollectionAtPath(path, type, cleanUpType?: string): Promise<any> {
     return new Promise((resolve, reject) => {
       var deleteFn = this.functions.functions.httpsCallable('recursiveDelete');
       deleteFn({path: path, type: type})
@@ -244,26 +271,36 @@ export class SenderService {
           if(cleanUpType == 'done') {
             this.snackbar.open('Disconnected', 'X', {duration: 5000});
           }
-          resolve(this.cleanUpData(cleanUpType));
+          if(cleanUpType == 'single') {
+            resolve('File deleted');
+          } else {
+            resolve(this.cleanUpData(cleanUpType));
+          }
         })
         .catch(err => {
           if(cleanUpType == 'done') {
             this.snackbar.open('Failed to Disconnect', 'X', {duration: 5000});
           }
           reject(err);
-        })
+        });
     });
   }
 
-  deleteFileStorage(): Promise<any> {
+  deleteFileStorage(requestType?: string, fileName?: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      for(let i = 0; i < this.fileList.length; i++) {
-        this.storage.storage.ref(this.id).child(this.fileList[i].name).delete().then(() => {
-          console.log(`Deleted: ${this.fileList[i].name}`);
-          this.fileList.splice(0, 1);
+      if(requestType == 'single') {
+        this.storage.storage.ref(this.id).child(fileName).delete().then(() => {
+          resolve();
         }).catch(err => reject(err));
+      } else {
+        for(let i = 0; i < this.fileList.length; i++) {
+          this.storage.storage.ref(this.id).child(this.fileList[i].name).delete().then(() => {
+            console.log(`Deleted: ${this.fileList[i].name}`);
+            this.fileList.splice(0, 1);
+          }).catch(err => reject(err));
+        }
+        resolve();
       }
-      resolve();
     });
   }
 

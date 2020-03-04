@@ -8,9 +8,14 @@
 <mat-card *ngIf="(senderServ.fileList.length === 0) && (senderServ.id !== undefined || null); else list" style="text-align: center;">No File Uploaded</mat-card>
 <ng-template #list>
 <mat-list *ngIf="senderServ.fileList.length > 0" style="background-color: white">
-    <mat-list-item *ngFor="let list of senderServ.fileList">
+    <mat-list-item *ngFor="let list of senderServ.fileList; let i = index">
         <mat-icon mat-list-icon>{{ universalServ.getIcon(list.type) }}</mat-icon>
         <h4 mat-line [title]="list.name">{{ list.name }}</h4>
+        <div class="dl-btn-wrapper">
+            <a mat-icon-button color="warn" matTooltip="Delete" matTooltipClass="biggerfont" (click)="senderServ.deleteSingleFile(list.id, list.name, i)">
+                <mat-icon>delete</mat-icon>
+            </a>
+        </div>
         <p mat-line>{{ universalServ.fileSizeConversion(list.size) }}</p>
         <mat-divider></mat-divider>
     </mat-list-item>
