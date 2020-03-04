@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { HttpClient } from 'selenium-webdriver/http';
 import { FileSaverService } from 'ngx-filesaver';
 import { PlayDialog } from '../dialog-data/play-dialog/play-dialog.component';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,8 @@ export class ReceiverService {
     private dialog: MatDialog,
     private dialogServ: DialogService,
     private snackbar: MatSnackBar,
-    private filesaver: FileSaverService
+    private filesaver: FileSaverService,
+    private sanitizer: DomSanitizer
   ) { }
 
   openDialogInsertChannelID() {
@@ -152,7 +154,7 @@ export class ReceiverService {
 
   setHrefButtonView(fileType: string, fileUrl: string) {
     if(fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
-      return new URL('javascript:void(0)');
+      return this.sanitizer.bypassSecurityTrustUrl('javascript:');
     } else {
       return fileUrl;
     }
