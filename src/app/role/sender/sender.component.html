@@ -22,15 +22,17 @@
 </mat-list>
 </ng-template>
 
-<div class="buttoncontainer fly">
-    <button  *ngIf="senderServ.id == undefined || null; else idCreated" mat-fab matTooltip="Start" matTooltipClass="biggerfont" (click)="senderServ.openCreateChannelDialog()" color="primary"><mat-icon>power_settings_new</mat-icon></button><span class="spacer"></span>
-    <ng-template #idCreated>
-        <button mat-fab matTooltip="Upload" matTooltipClass="biggerfont" color="primary" (click)="fileUpload.click()" [disabled]="senderServ.isUploading"><mat-icon>cloud_upload</mat-icon></button>
-        <input #fileUpload style="display: none;" type="file" (change)="uploadFile($event)">
-    </ng-template>
-    <button *ngIf="!senderServ.isCookieExist; else cookieExist" mat-fab matTooltip="Back" matTooltipClass="biggerfont" routerLink=""><mat-icon>arrow_back</mat-icon></button>
-    <ng-template #cookieExist>
-        <button *ngIf="senderServ.isCookieExist" mat-fab matTooltip="End Session" matTooltipClass="biggerfont" color="warn" (click)="senderServ.openDisconnectDialog()" [disabled]="senderServ.isUploading"><mat-icon>highlight_off</mat-icon></button>
-    </ng-template>
+<div class="flex-center">
+    <div class="buttoncontainer fly">
+        <button  *ngIf="senderServ.id == undefined || null; else idCreated" mat-fab matTooltip="Start" matTooltipClass="biggerfont" (click)="senderServ.openCreateChannelDialog()" color="primary"><mat-icon>power_settings_new</mat-icon></button><span class="spacer"></span>
+        <ng-template #idCreated>
+            <button mat-fab matTooltip="Upload" matTooltipClass="biggerfont" color="primary" (click)="fileUpload.click()" [disabled]="senderServ.isUploading"><mat-icon>cloud_upload</mat-icon></button>
+            <input #fileUpload style="display: none;" type="file" (change)="uploadFile($event)">
+        </ng-template>
+        <button *ngIf="!senderServ.isCookieExist; else cookieExist" mat-fab matTooltip="Back" matTooltipClass="biggerfont" routerLink=""><mat-icon>arrow_back</mat-icon></button>
+        <ng-template #cookieExist>
+            <button *ngIf="senderServ.isCookieExist" mat-fab matTooltip="End Session" matTooltipClass="biggerfont" color="warn" (click)="senderServ.openDisconnectDialog()" [disabled]="senderServ.isUploading"><mat-icon>highlight_off</mat-icon></button>
+        </ng-template>
+    </div>
 </div>
 

@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: auto; }
+html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: #ECECEC; }
 span.spacing {
     flex: auto;
@@ -10,9 +10,11 @@ span.divider {
     width: 20px;
 }
 .spacer {margin-right: 10px;}
-.buttoncontainer {margin-top: 20px;}
+.spacer-top {margin-top: 10px;}
+.buttoncontainer {margin: auto;}
 .container {background: rgb(251, 251, 251); width: auto; color: black; margin-bottom: 5px; padding: 5px;}
 .container.centertext {text-align: center;}
+.center {text-align: center;}
 .mat-tooltip.biggerfont {
     font-size: 13px;
 }
@@ -24,13 +26,51 @@ span.divider {
     align-content: space-between;
 }
 
+.home-container {
+    /* border: 1px groove black; */
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: space-between;
+}
+
+.margin-snackbar {
+    margin-top: 80px !important;
+}
+
+.home-container > mat-card {
+    width: 200px;
+    height: auto;
+    margin: 5px;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.list-file-container {
+    height: auto;
+    max-height: 100vmin;
+    border: 1px groove black;
+    overflow: auto;
+}
+
+.role-card > button {
+    bottom: 10px;
+}
+
 .dl-btn-wrapper > a {
     margin: 3px;
 }
 
 .buttoncontainer.fly {
     position: fixed;
-    right: 20px;
+    /* right: 20px; */
     bottom: 20px;
 }
 

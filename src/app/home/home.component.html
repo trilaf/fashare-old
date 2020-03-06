@@ -1,4 +1,22 @@
 <div>
-    <button mat-raised-button color="#E65100" routerLink="/sender">Sender</button><span class="spacer"></span>
-    <button mat-raised-button color="#43A047" routerLink="/receiver">Receiver</button>
+    <mat-card style="text-align: center">
+        <h3 matLine>Welcome to Fashare</h3>
+        <p>A transfer file web application for any devices. <br/> Choose your role below</p>
+    </mat-card>
+</div>
+<div class="home-container spacer-top">
+    <mat-card class="role-card">
+        <h4>Sender</h4>
+        <p>You will be host a channel to store the shared file</p>
+        <div class="center">
+            <button mat-raised-button color="primary" routerLink="/sender">Go</button>
+        </div>
+    </mat-card>
+    <mat-card class="role-card">
+        <h4>Receiver</h4>
+        <p>You will be the client for any available channel</p>
+        <div class="center">
+            <button mat-raised-button color="primary" routerLink="/receiver">Go</button>
+        </div>
+    </mat-card>
 </div>

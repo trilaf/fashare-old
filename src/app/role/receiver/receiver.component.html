@@ -4,29 +4,35 @@
         <p>Connected to <strong>{{ receiverServ.idChannel }}</strong></p>
     </ng-template>
 </div>
+
+<!-- <div class="list-file-container" *ngIf="receiverServ.isConnected"> -->
 <mat-card *ngIf="receiverServ.isConnected && (receiverServ.fileList.length === 0); else fileExist" style="text-align: center">No File</mat-card>
-<ng-template #fileExist>
-    <mat-list style="background-color: white" *ngIf="receiverServ.fileList.length !== 0">
-        <mat-list-item *ngFor="let file of receiverServ.fileList">
-            <mat-icon matListIcon>{{ universalServ.getIcon(file.type) }}</mat-icon>
-            <h6 matLine [title]="file.name">{{ file.name }}</h6>
-            <div class="dl-btn-wrapper">
-                <a mat-icon-button color="primary" matTooltip="View" [target]="receiverServ.setTargetButtonView(file.type)" matTooltipClass="biggerfont" [href]="receiverServ.setHrefButtonView(file.type, file.url)" (click)="receiverServ.openPlayDialog(file.type, file.name, file.url)">
-                    <mat-icon>{{ receiverServ.getIconForButtonView(file.type) }}</mat-icon>
-                </a>
-                <a mat-icon-button color="primary" matTooltip="Download" target="_blank" matTooltipClass="biggerfont" (click)="receiverServ.directDownload(file.url, file.name)">
-                    <mat-icon>cloud_download</mat-icon>
-                </a>
-            </div>
-            <p matLine>{{ universalServ.fileSizeConversion(file.size) }}</p>
-            <mat-divider></mat-divider>
-        </mat-list-item>
-    </mat-list>
-</ng-template>
-<div class="buttoncontainer fly">
-    <button mat-fab matTooltip="Disconnect" matTooltipClass="biggerfont" color="warn" [disabled]="receiverServ.isLoading" *ngIf="receiverServ.isConnected; else noId" (click)="receiverServ.disconnectChannel()"><mat-icon>power_settings_new</mat-icon></button>
-    <ng-template #noId>
-        <button mat-fab matTooltip="Connect" matTooltipClass="biggerfont" color="primary" [disabled]="receiverServ.isLoading" (click)="receiverServ.openDialogInsertChannelID()"><mat-icon>insert_link</mat-icon></button><span class="spacer"></span>
-        <button mat-fab matTooltip="Back" matTooltipClass="biggerfont" color="warn" [disabled]="receiverServ.isLoading" routerLink=""><mat-icon>arrow_back</mat-icon></button>
+    <ng-template #fileExist>
+        <mat-list style="background-color: white" *ngIf="receiverServ.fileList.length !== 0">
+            <mat-list-item *ngFor="let file of receiverServ.fileList">
+                <mat-icon matListIcon>{{ universalServ.getIcon(file.type) }}</mat-icon>
+                <h6 matLine [title]="file.name">{{ file.name }}</h6>
+                <div class="dl-btn-wrapper">
+                    <a mat-icon-button color="primary" matTooltip="View" [target]="receiverServ.setTargetButtonView(file.type)" matTooltipClass="biggerfont" [href]="receiverServ.setHrefButtonView(file.type, file.url)" (click)="receiverServ.openPlayDialog(file.type, file.name, file.url)">
+                        <mat-icon>{{ receiverServ.getIconForButtonView(file.type) }}</mat-icon>
+                    </a>
+                    <a mat-icon-button color="primary" matTooltip="Download" target="_blank" matTooltipClass="biggerfont" (click)="receiverServ.directDownload(file.url, file.name)">
+                        <mat-icon>cloud_download</mat-icon>
+                    </a>
+                </div>
+                <p matLine>{{ universalServ.fileSizeConversion(file.size) }}</p>
+                <mat-divider></mat-divider>
+            </mat-list-item>
+        </mat-list>
     </ng-template>
+<!-- </div> -->
+
+<div class="flex-center">
+    <div class="buttoncontainer fly">
+        <button mat-fab matTooltip="Disconnect" matTooltipClass="biggerfont" color="warn" [disabled]="receiverServ.isLoading" *ngIf="receiverServ.isConnected; else noId" (click)="receiverServ.disconnectChannel()"><mat-icon>power_settings_new</mat-icon></button>
+        <ng-template #noId>
+            <button mat-fab matTooltip="Connect" matTooltipClass="biggerfont" color="primary" [disabled]="receiverServ.isLoading" (click)="receiverServ.openDialogInsertChannelID()"><mat-icon>insert_link</mat-icon></button><span class="spacer"></span>
+            <button mat-fab matTooltip="Back" matTooltipClass="biggerfont" color="warn" [disabled]="receiverServ.isLoading" routerLink=""><mat-icon>arrow_back</mat-icon></button>
+        </ng-template>
+    </div>
 </div>

@@ -80,7 +80,8 @@ import { PlayDialog } from './dialog-data/play-dialog/play-dialog.component';
     DialogService,
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {
       horizontalPosition: 'left',
-      verticalPosition: 'bottom'
+      verticalPosition: 'top',
+      panelClass: ['margin-snackbar']
     }}
   ],
   bootstrap: [AppComponent],
