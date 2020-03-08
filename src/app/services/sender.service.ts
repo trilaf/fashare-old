@@ -28,7 +28,9 @@ export class SenderService {
   isCookieExist: boolean;
   percentResult = '0';
   isUploading: boolean = false;
-  firestoreTask: Subscription
+  isLoading: boolean = false;
+  firestoreTask: Subscription;
+  uploadTask: firebase.storage.UploadTask;
 
   constructor(
    private fstore: AngularFirestore,
@@ -52,22 +54,21 @@ export class SenderService {
       this.fstore.firestore.collection(this.id).where('name', '==', filename).get().then(snapshot => {
         if(!snapshot.empty) {
           snapshot.forEach(doc => {
-            if(doc.get('name') == filename) reject();
+            if(doc.get('name') == filename) reject('file exists');
             else resolve();
           });
         } else resolve();
       }, err => {
-        console.log(err);
-        reject();
+        reject(err);
       })
     });
   }
 
   checkShortID(shortID: string) {
-    this.snackbar.open('Checking channel name...', '', {duration: 5000});
+    this.snackbar.open('Checking channel name...');
     this.fstore.firestore.collection('_shortID').doc(shortID).get().then(data => {
       if(data.get('id') == undefined) {
-        this.snackbar.open('Creating channel...', '', {duration: 5000});
+        this.snackbar.open('Creating channel...');
         this.writeShortID(shortID);
       } else {
         this.snackbar.open('Channel name is already taken', 'X', {duration: 5000});
@@ -111,6 +112,12 @@ export class SenderService {
     this.id = this.fstore.createId();
   }
 
+  cancelUpload() {
+    this.uploadTask.cancel();
+    this.isUploading = false;
+    this.snackbar.open('Upload canceled', 'X', {duration: 5000});
+  }
+
   async uploadFile(event) {
     if(event.target.files.length === 0) {
       return;
@@ -118,26 +125,42 @@ export class SenderService {
     let downloadURL;
     let isFileExist: boolean = false;
     this.isUploading = true;
-    await this.checkFileExist(event.target.files[0].name).catch(err => {
+    for(let i=0; i < this.fileList.length; i++) {
+      if(this.fileList[i].name == event.target.files[0].name) {
+        isFileExist = true;
+        this.isUploading = false;
+        this.snackbar.open('File already exists', 'X', {duration: 5000});
+        break;
+      }
+    }
+    /* await this.checkFileExist(event.target.files[0].name).catch(err => {
       this.isUploading = false;
       isFileExist = true;
-      this.snackbar.open('File already exists', 'X', {duration: 5000});
+      console.log(err);
+      if(err == 'file exists') {
+        this.snackbar.open('File already exists', 'X', {duration: 5000});
+      } else {
+        this.snackbar.open('Upload Failed', 'X', {duration: 5000});
+      }
       return;
-    });
+    }); */
     if(isFileExist) {
       return true;
     }
 
-    this.snackbar.openFromComponent(UploadingSnackbar);
-
     const file = event.target.files[0];
     const fileRef = this.storage.storage.ref(this.id).child(event.target.files[0].name);
-    await fileRef.put(file)
-    .on('state_changed', 
+    this.uploadTask = fileRef.put(file);
+    this.snackbar.openFromComponent(UploadingSnackbar);
+    this.uploadTask.on('state_changed', 
     progress => {
       this.snackbarServ.percentResult = ((progress.bytesTransferred / progress.totalBytes) * 100).toFixed(1);
     }, 
-    err => {console.log(`Upload Failed: ${err}`); this.isUploading = false; this.snackbar.open(`Upload Failed`, 'X', {duration: 5000})},
+    err => {
+      console.log(`Upload Failed (errorput): ${err.message}`);
+      this.isUploading = false;
+      this.uploadTask.cancel();
+    },
     async () => {
       await fileRef.getDownloadURL().then(urlDL => {
         downloadURL = urlDL;
@@ -148,7 +171,7 @@ export class SenderService {
           type: event.target.files[0].type
         }
       this.uploadFileDetail(detailData);
-      }, err => {console.log(`Upload Failed: ${err}`); this.isUploading = false; this.snackbar.open(`Upload Failed`, 'X', {duration: 5000});})
+      }, err => {console.log(`Upload Failed (filedetail): ${err}`); this.isUploading = false; this.snackbar.open(`Upload Failed`, 'X', {duration: 5000});})
     })
   }
 
@@ -175,15 +198,15 @@ export class SenderService {
       if(type === 'check') {
         this.snackbar.open('Session Loaded', 'X', {duration: 5000});
         type = '';
-        this.isUploading = false;
+        this.isLoading = false;
       }
     }, err => {
-      this.snackbar.open(`Error: ${err}`, 'X');
+      this.snackbar.open(`Failed sync file list`, 'X');
     });
   }
 
   disconnectChannel() {
-    this.snackbar.open('Disconnecting...', '', {duration: 5000});
+    this.snackbar.open('Disconnecting...');
     if(this.fileList.length === 0) {
       this.deleteCollectionAtPath('_shortID/' + this.simpleChannelID, 'direct', 'done');
     } else {
@@ -193,12 +216,12 @@ export class SenderService {
           this.deleteCollectionAtPath('_shortID/' + this.simpleChannelID, 'direct', 'done');
         }).catch(err => {
           console.log(err);
-          this.snackbar.open(`Failed: ${err}`, 'X');
+          this.snackbar.open(`Failed disconnecting`, 'X');
         });
       })
       .catch(err => {
         console.log(err);
-        this.snackbar.open(`Failed: ${err}`, 'X');
+        this.snackbar.open(`Failed disconnecting`, 'X');
       });
     }
   }
@@ -241,7 +264,7 @@ export class SenderService {
   }
 
   deleteSingleFile(fileId: string, fileName: string, index) {
-    this.snackbar.open(`Deleting : ${fileName}`, '', {duration: 5000});
+    this.snackbar.open(`Deleting : ${fileName}`);
     this.deleteFileStorage('single', fileName).then(() => {
       this.deleteCollectionAtPath(this.id + '/' + fileId, 'direct', 'single').then(res => {
         this.fileList.splice(index, 1);
@@ -279,7 +302,7 @@ export class SenderService {
         })
         .catch(err => {
           if(cleanUpType == 'done') {
-            this.snackbar.open('Failed to Disconnect', 'X', {duration: 5000});
+            this.snackbar.open('Failed disconnecting', 'X', {duration: 5000});
           }
           reject(err);
         });

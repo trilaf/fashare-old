@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     if(this.cookie.check('CHNL_ID') == true) {
-      this.senderServ.isUploading = true;
+      this.senderServ.isLoading = true;
       this.senderServ.id = this.cookie.get('CHNL_ID');
       this.senderServ.simpleChannelID = this.cookie.get('CHNL_NAME');
       this.snackbar.open('Checking Session...', '', {duration: 5000});

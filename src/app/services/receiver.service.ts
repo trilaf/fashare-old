@@ -72,6 +72,9 @@ export class ReceiverService {
         this.getFileList(realChannelID, 'connect');
         this.channelListener(shortID);
       }
+    }).catch(err => {
+      this.isLoading = false;
+      this.snackbar.open(`Failed to connect channel`, 'X');
     });
   }
 
