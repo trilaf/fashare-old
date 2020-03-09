@@ -1,7 +1,7 @@
 <div class="container centertext">
     <p *ngIf="!receiverServ.isConnected; else connected">Not Connected</p>
     <ng-template #connected>
-        <p>Connected to <strong>{{ receiverServ.idChannel }}</strong></p>
+        <p>Connected to <strong>{{ receiverServ.idChannel }}</strong> (Loaded {{ receiverServ.fileList.length }} {{ (receiverServ.fileList.length > 1) ? 'files' : 'file' }})</p>
     </ng-template>
 </div>
 

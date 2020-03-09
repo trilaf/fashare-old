@@ -86,8 +86,8 @@ export class SenderService {
     this.fstore.collection('_shortID').doc<shortChannelID>(shortID).set(randomRealID).then(() => {
       this.id = randomRealID.id;
       this.simpleChannelID = shortID;
-      this.cookie.set('CHNL_ID', this.id, 3650, '/');
-      this.cookie.set('CHNL_NAME', shortID, 3650, '/');
+      this.cookie.set('CHNL_ID', this.id, 3650, '/', window.location.hostname, false, 'Lax');
+      this.cookie.set('CHNL_NAME', shortID, 3650, '/', window.location.hostname, false, 'Lax');
       this.isCookieExist = true;
       this.snackbar.open('Channel successfully created', 'X', {duration: 5000});
     }, err => {

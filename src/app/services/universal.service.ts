@@ -35,5 +35,13 @@ export class UniversalService {
       return 'description';
     }
   }
+
+  totalSize(fileData: Array<any>) {
+    let total: number = 0;
+    for(let i = 0; i < fileData.length; i++) {
+      total += fileData[i].size;
+    }
+    return this.fileSizeConversion(total) as string;
+  }
   
 }

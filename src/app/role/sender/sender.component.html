@@ -1,5 +1,5 @@
 <div class="container" *ngIf="senderServ.id !== undefined || null; else idNotSet">
-    <p style="font-weight: bold">Channel : {{ senderServ.simpleChannelID }}</p>
+    <p><b>Channel : {{ senderServ.simpleChannelID }}</b> (Uploaded {{ senderServ.fileList.length }} {{ (senderServ.fileList.length > 1) ? 'files': 'file' }} / {{ (senderServ.fileList.length > 0) ? universalServ.totalSize(senderServ.fileList) : '0 bytes' }})</p>
 </div>
 <ng-template #idNotSet>
     <mat-card style="text-align: center">Channel Not Set</mat-card>
