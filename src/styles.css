@@ -54,9 +54,7 @@ span.divider {
 }
 
 .list-file-container {
-    height: auto;
-    max-height: 100vmin;
-    border: 1px groove black;
+    height: calc(100vh - 230px);
     overflow: auto;
 }
 
@@ -70,7 +68,6 @@ span.divider {
 
 .buttoncontainer.fly {
     position: fixed;
-    /* right: 20px; */
     bottom: 20px;
 }
 

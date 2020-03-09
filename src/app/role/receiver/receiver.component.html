@@ -5,7 +5,7 @@
     </ng-template>
 </div>
 
-<!-- <div class="list-file-container" *ngIf="receiverServ.isConnected"> -->
+<div class="list-file-container" *ngIf="receiverServ.isConnected">
 <mat-card *ngIf="receiverServ.isConnected && (receiverServ.fileList.length === 0); else fileExist" style="text-align: center">No File</mat-card>
     <ng-template #fileExist>
         <mat-list style="background-color: white" *ngIf="receiverServ.fileList.length !== 0">
@@ -25,7 +25,7 @@
             </mat-list-item>
         </mat-list>
     </ng-template>
-<!-- </div> -->
+</div>
 
 <div class="flex-center">
     <div class="buttoncontainer fly">
