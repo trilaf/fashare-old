@@ -147,7 +147,7 @@ export class ReceiverService {
     });  
   }
 
-  getIconForButtonView(fileType: string) {
+  getIconForButtonPreview(fileType: string) {
     if(fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
       return 'play_arrow';
     } else {
@@ -155,7 +155,7 @@ export class ReceiverService {
     }
   }
 
-  setHrefButtonView(fileType: string, fileUrl: string) {
+  setHrefButtonPreview(fileType: string, fileUrl: string) {
     if(fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
       return this.sanitizer.bypassSecurityTrustUrl('javascript:');
     } else {
@@ -163,7 +163,7 @@ export class ReceiverService {
     }
   }
 
-  setTargetButtonView(fileType: string) {
+  setTargetButtonPreview(fileType: string) {
     if(fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
       return '';
     } else {
@@ -171,7 +171,7 @@ export class ReceiverService {
     }
   }
 
-  openPlayDialog(fileType, fileName, fileUrl) {
+  openPlayDialog(fileType: string, fileName, fileUrl) {
     if(fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
       let type;
       if(fileType.match(/(?=audio)\w+/g)) {
@@ -188,6 +188,14 @@ export class ReceiverService {
       })
     } else {
       return;
+    }
+  }
+
+  displayPreviewButton(fileType: string): boolean {
+    if(fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g) || fileType.match(/(?=text)\w+/g) || fileType.match(/(?=image)\w+/g) || fileType == 'application/pdf') {
+      return true;
+    } else {
+      return false;
     }
   }
 
