@@ -64,7 +64,10 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "fashare:build"
+            "browserTarget": "fashare:build",
+            "ssl": true,
+            "sslKey": "browser-sync/certs/server.key",
+            "sslCert": "browser-sync/certs/server.crt"
           },
           "configurations": {
             "production": {
