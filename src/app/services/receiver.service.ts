@@ -192,7 +192,7 @@ export class ReceiverService {
   }
 
   displayPreviewButton(fileType: string): boolean {
-    if(fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g) || fileType.match(/(?=text)\w+/g) || fileType.match(/(?=image)\w+/g) || fileType == 'application/pdf') {
+    if(fileType.match(/(?=audio|video|text|image)\w+/g)) {
       return true;
     } else {
       return false;
