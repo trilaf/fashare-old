@@ -86,8 +86,10 @@ export class SenderService {
     this.fstore.collection('_shortID').doc<shortChannelID>(shortID).set(randomRealID).then(() => {
       this.id = randomRealID.id;
       this.simpleChannelID = shortID;
-      this.cookie.set('CHNL_ID', this.id, 3650, '/', window.location.hostname, false, 'Lax');
-      this.cookie.set('CHNL_NAME', shortID, 3650, '/', window.location.hostname, false, 'Lax');
+      document.cookie = `CHNL_ID=${ this.id }; max-age=${ 3600*1000 }; path=/; samesite=None; secure`;
+      document.cookie = `CHNL_NAME=${ encodeURIComponent(shortID) }; max-age=${ 3600*1000 }; path=/; samesite=None; secure`;
+      /* this.cookie.set('CHNL_ID', this.id, 3650, '/', window.location.hostname, true, 'None');
+      this.cookie.set('CHNL_NAME', shortID, 3650, '/', window.location.hostname, true, 'None'); */
       this.isCookieExist = true;
       this.snackbar.open('Channel successfully created', 'X', {duration: 5000});
     }, err => {
@@ -207,20 +209,37 @@ export class SenderService {
 
   disconnectChannel() {
     this.snackbar.open('Disconnecting...');
+    this.isLoading = true;
     if(this.fileList.length === 0) {
-      this.deleteCollectionAtPath('_shortID/' + this.simpleChannelID, 'direct', 'done');
+      this.deleteCollectionAtPath('_shortID/' + this.simpleChannelID, 'direct', 'nofile').then(() => {
+        this.isLoading = false;
+        this.snackbar.open('Disconnected', 'X', {duration: 5000});
+      }).catch(err => {
+        console.log(err);
+        this.isLoading = false;
+        this.snackbar.open('Failed disconnecting', 'X', {duration: 5000});
+      });
     } else {
       this.deleteFileStorage()
       .then(() => {
         this.deleteCollectionAtPath(this.id, 'direct').then(() => {
-          this.deleteCollectionAtPath('_shortID/' + this.simpleChannelID, 'direct', 'done');
+          this.deleteCollectionAtPath('_shortID/' + this.simpleChannelID, 'direct', 'done').then(() => {
+            this.isLoading = false;
+            this.snackbar.open('Disconnected', 'X', {duration: 5000});
+          }).catch(err => {
+            console.log(err);
+            this.isLoading = false;
+            this.snackbar.open('Failed disconnecting', 'X', {duration: 5000});
+          });
         }).catch(err => {
           console.log(err);
+          this.isLoading = false;
           this.snackbar.open(`Failed disconnecting`, 'X');
         });
       })
       .catch(err => {
         console.log(err);
+        this.isLoading = false;
         this.snackbar.open(`Failed disconnecting`, 'X');
       });
     }
@@ -228,16 +247,23 @@ export class SenderService {
 
   cleanUpData(type?: string) {
     if(type == 'done') {
-      console.log('Cleaning Up Data...');
       this.id = undefined;
       if(this.firestoreTask != undefined) {
         this.firestoreTask.unsubscribe();
       }
       this.fileList = [];
+      document.cookie = `CHNL_ID=""; max-age=-1`;
+      document.cookie = `CHNL_NAME=""; max-age=-1`;
+      /* this.cookie.delete('CHNL_ID', '/', window.location.hostname);
+      this.cookie.delete('CHNL_NAME', '/', window.location.hostname); */
       this.isCookieExist = false;
-      this.cookie.delete('CHNL_ID');
-      this.cookie.delete('CHNL_NAME');
-      console.log('Cleaning Done');
+    } else if(type == 'nofile') {
+      this.id = undefined;
+      document.cookie = `CHNL_ID=""; max-age=-1`;
+      document.cookie = `CHNL_NAME=""; max-age=-1`;
+      /* this.cookie.delete('CHNL_ID', '/', window.location.hostname);
+      this.cookie.delete('CHNL_NAME', '/', window.location.hostname); */
+      this.isCookieExist = false;
     }
   }
 
@@ -291,9 +317,6 @@ export class SenderService {
       var deleteFn = this.functions.functions.httpsCallable('recursiveDelete');
       deleteFn({path: path, type: type})
         .then(() => {
-          if(cleanUpType == 'done') {
-            this.snackbar.open('Disconnected', 'X', {duration: 5000});
-          }
           if(cleanUpType == 'single') {
             resolve('File deleted');
           } else {
@@ -301,9 +324,6 @@ export class SenderService {
           }
         })
         .catch(err => {
-          if(cleanUpType == 'done') {
-            this.snackbar.open('Failed disconnecting', 'X', {duration: 5000});
-          }
           reject(err);
         });
     });
