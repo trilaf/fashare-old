@@ -71,6 +71,7 @@ export class ReceiverService {
         realChannelID = data.get('id');
         this.getFileList(realChannelID, 'connect');
         this.channelListener(shortID);
+        document.cookie = "RCVR=1; path=/; samesite=none; secure";
       }
     }).catch(err => {
       this.isLoading = false;
@@ -106,6 +107,7 @@ export class ReceiverService {
     this.fileList = [];
     this.dataSubscription.unsubscribe();
     this.channelSubscription.unsubscribe();
+    document.cookie = `RCVR=""; max-age=-1`;
     if(type == 'endedByHost') {
       this.snackbar.open('Channel ended by host', 'OK', {duration: 5000});
     } else {

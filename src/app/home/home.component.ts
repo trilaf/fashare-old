@@ -24,6 +24,10 @@ export class HomeComponent implements OnInit {
       this.router.navigate(['/sender']);
       this.snackbar.open('You must end session first', 'X', {duration: 5000});
     }
+    if(this.cookie.check('RCVR') == true) {
+      this.router.navigate(['/receiver']);
+      this.snackbar.open('You must disconnect first', 'X', {duration: 5000});
+    }
   }
 
 }
