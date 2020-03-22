@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if(this.cookie.check('CHNL_ID') == true) {
+    if (this.cookie.check('CHNL_ID') === true) {
       this.senderServ.isLoading = true;
       this.senderServ.id = this.cookie.get('CHNL_ID');
       this.senderServ.simpleChannelID = this.cookie.get('CHNL_NAME');
@@ -32,8 +32,8 @@ export class AppComponent implements OnInit {
       this.senderServ.readFileList('check');
       this.router.navigate(['/sender']);
     }
-    if(!this.receiverServ.isConnected) {
-      if(this.cookie.check('RCVR')) {
+    if (!this.receiverServ.isConnected) {
+      if (this.cookie.check('RCVR')) {
         document.cookie = `RCVR=""; max-age=-1`;
       }
     }

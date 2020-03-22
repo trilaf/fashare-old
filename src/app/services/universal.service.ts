@@ -9,10 +9,11 @@ export class UniversalService {
 
   fileSizeConversion(size): string {
     let converted: string;
-    let kB: number, mB: number;
-    if(size > 1024) {
+    let kB: number;
+    let mB: number;
+    if (size > 1024) {
       kB = size / 1024;
-      if(kB > 1024) {
+      if (kB > 1024) {
         mB = kB / 1024;
         converted = mB.toFixed(2) + ' MB';
       } else {
@@ -25,11 +26,11 @@ export class UniversalService {
   }
 
   getIcon(fileType: string) {
-    if(fileType.match(/(?=image)\w+/g)) {
+    if (fileType.match(/(?=image)\w+/g)) {
       return 'photo';
-    } else if(fileType.match(/(?=audio)\w+/g)) {
+    } else if (fileType.match(/(?=audio)\w+/g)) {
       return 'music_note';
-    } else if(fileType.match(/(?=video)\w+/g)) {
+    } else if (fileType.match(/(?=video)\w+/g)) {
       return 'videocam';
     } else {
       return 'description';
@@ -38,10 +39,9 @@ export class UniversalService {
 
   totalSize(fileData: Array<any>) {
     let total: number = 0;
-    for(let i = 0; i < fileData.length; i++) {
+    for (let i = 0; i < fileData.length; i++) {
       total += fileData[i].size;
     }
     return this.fileSizeConversion(total) as string;
   }
-  
 }
