@@ -16,7 +16,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class ReceiverService {
 
-  //shortID = Channel Name
+  // shortID = Channel Name
 
   idChannel: string;
   isConnected: boolean;
@@ -37,16 +37,16 @@ export class ReceiverService {
   openDialogInsertChannelID() {
     const dialogRef = this.dialog.open(ConnectChannelDialog);
     dialogRef.afterClosed().subscribe(res => {
-      if(res == true) {
+      if (res === true) {
         this.getRealChannelID(this.dialogServ.idChannel);
       }
-    })
+    });
   }
 
   async isChannelExists(idCH): Promise<boolean> {
     let isExists: boolean;
     await this.fstore.firestore.collection(idCH).get().then(doc => {
-      if(doc.empty) {
+      if (doc.empty) {
         isExists = false;
       } else {
         isExists = true;
@@ -60,7 +60,7 @@ export class ReceiverService {
     this.isLoading = true;
     this.snackbar.open('Connecting...');
     this.fstore.firestore.collection('_shortID').doc(shortID).get().then(data => {
-      if(data.get('id') == undefined) {
+      if (data.get('id') === undefined) {
         this.snackbar.open('Channel Not Found', 'OK', {duration: 5000});
         this.isLoading = false;
       } else {
@@ -71,7 +71,7 @@ export class ReceiverService {
         realChannelID = data.get('id');
         this.getFileList(realChannelID, 'connect');
         this.channelListener(shortID);
-        document.cookie = "RCVR=1; path=/; samesite=none; secure";
+        document.cookie = 'RCVR=1; path=/; samesite=none; secure';
       }
     }).catch(err => {
       this.isLoading = false;
@@ -88,7 +88,7 @@ export class ReceiverService {
           ...e.payload.doc.data()
         } as Data;
       });
-      if(type == 'connect') {
+      if (type === 'connect') {
         this.snackbar.open('Successfully fetched', 'OK', {duration: 5000});
         type = '';
       }
@@ -99,7 +99,7 @@ export class ReceiverService {
   }
 
   disconnectChannel(type?: string) {
-    if(type !== 'endedByHost') {
+    if (type !== 'endedByHost') {
       this.snackbar.open('Disconnecting...');
     }
     this.idChannel = '';
@@ -108,7 +108,7 @@ export class ReceiverService {
     this.dataSubscription.unsubscribe();
     this.channelSubscription.unsubscribe();
     document.cookie = `RCVR=""; max-age=-1`;
-    if(type == 'endedByHost') {
+    if (type === 'endedByHost') {
       this.snackbar.open('Channel ended by host', 'OK', {duration: 5000});
     } else {
       this.snackbar.open('Disconnected', 'OK', {duration: 5000});
@@ -117,10 +117,10 @@ export class ReceiverService {
 
   channelListener(shortID) {
     this.channelSubscription = this.fstore.collection('_shortID').doc(shortID).snapshotChanges().subscribe(snapshot => {
-      if(snapshot.payload.get('id') == undefined) {
+      if (snapshot.payload.get('id') === undefined) {
         this.disconnectChannel('endedByHost');
       }
-    })
+    });
   }
 
   directDownload(url, fileName?: string) {
@@ -133,12 +133,12 @@ export class ReceiverService {
 
   getFile(url): Promise<any> {
     return new Promise((resolve, reject) => {
-      var xhr = new XMLHttpRequest();
+      const xhr = new XMLHttpRequest();
       xhr.open('GET', url);
       xhr.responseType = 'blob';
-      xhr.onreadystatechange = function(e) {
-        if(xhr.readyState === 4) {
-          if(xhr.status === 200) {
+      xhr.onreadystatechange = (e) => {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
             resolve(xhr.response);
           } else {
             reject(new Error(`Error (${xhr.status}):`));
@@ -146,11 +146,11 @@ export class ReceiverService {
         }
       };
       xhr.send();
-    });  
+    });
   }
 
   getIconForButtonPreview(fileType: string) {
-    if(fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
+    if (fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
       return 'play_arrow';
     } else {
       return 'remove_red_eye';
@@ -158,7 +158,7 @@ export class ReceiverService {
   }
 
   setHrefButtonPreview(fileType: string, fileUrl: string) {
-    if(fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
+    if (fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
       return this.sanitizer.bypassSecurityTrustUrl('javascript:');
     } else {
       return fileUrl;
@@ -166,7 +166,7 @@ export class ReceiverService {
   }
 
   setTargetButtonPreview(fileType: string) {
-    if(fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
+    if (fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
       return '';
     } else {
       return '_blank';
@@ -174,11 +174,11 @@ export class ReceiverService {
   }
 
   openPlayDialog(fileType: string, fileName, fileUrl) {
-    if(fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
+    if (fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
       let type;
-      if(fileType.match(/(?=audio)\w+/g)) {
+      if (fileType.match(/(?=audio)\w+/g)) {
         type = 'audio';
-      } else if(fileType.match(/(?=video)\w+/g)) {
+      } else if (fileType.match(/(?=video)\w+/g)) {
         type = 'video';
       }
       this.dialog.open(PlayDialog, {
@@ -187,14 +187,14 @@ export class ReceiverService {
           url: fileUrl,
           type: type as string
         }
-      })
+      });
     } else {
       return;
     }
   }
 
   displayPreviewButton(fileType: string): boolean {
-    if(fileType.match(/(?=audio|video|text|image)\w+/g)) {
+    if (fileType.match(/(?=audio|video|text|image)\w+/g)) {
       return true;
     } else {
       return false;
