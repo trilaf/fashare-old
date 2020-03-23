@@ -123,7 +123,9 @@ export class ReceiverService {
     });
   }
 
-  directDownload(url, fileName?: string) {
+  directDownload(url, fileName?: string, fileType?: string) {
+    /* const fileBlob = new Blob([new Uint8Array(url)], { type: fileType });
+    this.filesaver.save(fileBlob, fileName); */
     this.getFile(url).then(res => {
       this.filesaver.save(res, fileName);
     }).catch(err => {
@@ -137,7 +139,8 @@ export class ReceiverService {
       xhr.open('GET', url);
       xhr.responseType = 'blob';
       xhr.onreadystatechange = (e) => {
-        if (xhr.readyState === 4) {
+        console.log(xhr.readyState);
+        if (xhr.readyState === 3) {
           if (xhr.status === 200) {
             resolve(xhr.response);
           } else {
@@ -157,7 +160,7 @@ export class ReceiverService {
     }
   }
 
-  setHrefButtonPreview(fileType: string, fileUrl: string) {
+  setHrefButtonPreview(fileType: string, fileUrl: string) { // Not Used
     if (fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
       return this.sanitizer.bypassSecurityTrustUrl('javascript:');
     } else {
@@ -165,7 +168,7 @@ export class ReceiverService {
     }
   }
 
-  setTargetButtonPreview(fileType: string) {
+  setTargetButtonPreview(fileType: string) { // Not Used
     if (fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
       return '';
     } else {
@@ -174,12 +177,14 @@ export class ReceiverService {
   }
 
   openPlayDialog(fileType: string, fileName, fileUrl) {
-    if (fileType.match(/(?=audio)\w+/g) || fileType.match(/(?=video)\w+/g)) {
+    if (fileType.match(/(?=audio|image|video)\w+/g)) {
       let type;
       if (fileType.match(/(?=audio)\w+/g)) {
         type = 'audio';
       } else if (fileType.match(/(?=video)\w+/g)) {
         type = 'video';
+      } else if (fileType.match(/(?=image)\w+/g)) {
+        type = 'image';
       }
       this.dialog.open(PlayDialog, {
         data: {
@@ -198,6 +203,14 @@ export class ReceiverService {
       return true;
     } else {
       return false;
+    }
+  }
+
+  displayDownloadButton(fileType: string): boolean {
+    if (fileType.match(/(?=image)\w+/g)) {
+      return false;
+    } else {
+      return true;
     }
   }
 
