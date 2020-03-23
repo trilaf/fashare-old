@@ -8,7 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { HttpClient } from 'selenium-webdriver/http';
 import { FileSaverService } from 'ngx-filesaver';
-import { PlayDialogComponent } from '../dialog-data/play-dialog/play-dialog.component';
+import { PreviewDialogComponent } from '../dialog-data/preview-dialog/preview-dialog.component';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Injectable({
@@ -186,7 +186,7 @@ export class ReceiverService {
       } else if (fileType.match(/(?=image)\w+/g)) {
         type = 'image';
       }
-      this.dialog.open(PlayDialogComponent, {
+      this.dialog.open(PreviewDialogComponent, {
         data: {
           name: fileName,
           url: fileUrl,
