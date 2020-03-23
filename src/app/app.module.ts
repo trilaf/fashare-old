@@ -23,6 +23,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { HttpClientModule } from '@angular/common/http';
 import { MatInputModule } from '@angular/material/input';
+import { DeviceDetectorModule } from 'ngx-device-detector';
 
 import { HomeComponent } from './home/home.component';
 import { SenderComponent } from './role/sender/sender.component';
@@ -72,7 +73,8 @@ import { PlayDialog } from './dialog-data/play-dialog/play-dialog.component';
     MatInputModule,
     MatTooltipModule,
     HttpClientModule,
-    AngularFireFunctionsModule
+    AngularFireFunctionsModule,
+    DeviceDetectorModule.forRoot()
   ],
   providers: [
     CookieService,
