@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'disconnect-dialog',
+    selector: 'app-disconnect-dialog',
     templateUrl: './disconnect-dialog.component.html'
 })
-export class DisconnectDialog {}
+export class DisconnectDialogComponent {}

@@ -10,7 +10,6 @@ import { UniversalService } from 'src/app/services/universal.service';
 })
 export class SenderComponent implements OnInit {
 
-  
   idChannel = 'Not Set';
 
   constructor(

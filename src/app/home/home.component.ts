@@ -20,11 +20,11 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.appComponent.pageTitle = 'Home';
-    if(this.cookie.check('CHNL_ID') == true) {
+    if (this.cookie.check('CHNL_ID') === true) {
       this.router.navigate(['/sender']);
       this.snackbar.open('You must end session first', 'X', {duration: 5000});
     }
-    if(this.cookie.check('RCVR') == true) {
+    if (this.cookie.check('RCVR') === true) {
       this.router.navigate(['/receiver']);
       this.snackbar.open('You must disconnect first', 'X', {duration: 5000});
     }

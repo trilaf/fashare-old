@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Data } from '../models/fashare-models';
 import { MatDialog } from '@angular/material/dialog';
-import { ConnectChannelDialog } from '../dialog-data/connect-channel-dialog/connect-channel-dialog.component';
+import { ConnectChannelDialogComponent } from '../dialog-data/connect-channel-dialog/connect-channel-dialog.component';
 import { DialogService } from './dialog.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
@@ -35,7 +35,7 @@ export class ReceiverService {
   ) { }
 
   openDialogInsertChannelID() {
-    const dialogRef = this.dialog.open(ConnectChannelDialog);
+    const dialogRef = this.dialog.open(ConnectChannelDialogComponent);
     dialogRef.afterClosed().subscribe(res => {
       if (res === true) {
         this.getRealChannelID(this.dialogServ.idChannel);

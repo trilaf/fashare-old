@@ -1,11 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
-    selector: 'uploading-snackbar',
+    selector: 'app-uploading-snackbar',
     templateUrl: './uploading-snackbar.component.html',
 })
-export class UploadingSnackbar implements OnInit {
+export class UploadingSnackbarComponent implements OnInit {
     testValue = 0;
 
     constructor(
@@ -13,14 +13,14 @@ export class UploadingSnackbar implements OnInit {
     ) {}
 
     ngOnInit() {
-        //const progress = setInterval(() => {
-        //    if(this.testValue == 100) {
-        //        clearInterval(progress);
-        //        this.snackbarRef.dismiss();
-        //    } else {
-        //        this.testValue += 10;
-        //    }
-        //    console.log(`Value: ${this.testValue}`)
-        //}, 500);
+        /* const progress = setInterval(() => {
+            if(this.testValue == 100) {
+                clearInterval(progress);
+                this.snackbarRef.dismiss();
+            } else {
+                this.testValue += 10;
+            }
+            console.log(`Value: ${this.testValue}`)
+        }, 500); */
     }
 }

@@ -29,10 +29,10 @@ import { HomeComponent } from './home/home.component';
 import { SenderComponent } from './role/sender/sender.component';
 import { ReceiverComponent } from './role/receiver/receiver.component';
 
-import { ConnectChannelDialog } from './dialog-data/connect-channel-dialog/connect-channel-dialog.component';
-import { DisconnectDialog } from './dialog-data/disconnect-dialog/disconnect-dialog.component';
-import { CreateChannelDialog } from './dialog-data/create-channel-dialog/create-channel-dialog.component';
-import { UploadingSnackbar } from './snackbar-data/uploading-snackbar/uploading-snackbar.component';
+import { ConnectChannelDialogComponent } from './dialog-data/connect-channel-dialog/connect-channel-dialog.component';
+import { DisconnectDialogComponent } from './dialog-data/disconnect-dialog/disconnect-dialog.component';
+import { CreateChannelDialogComponent } from './dialog-data/create-channel-dialog/create-channel-dialog.component';
+import { UploadingSnackbarComponent } from './snackbar-data/uploading-snackbar/uploading-snackbar.component';
 
 import { CookieService } from 'ngx-cookie-service';
 import { SenderService } from './services/sender.service';
@@ -45,11 +45,11 @@ import { PreviewDialogComponent } from './dialog-data/preview-dialog/preview-dia
     HomeComponent,
     SenderComponent,
     ReceiverComponent,
-    DisconnectDialog,
-    ConnectChannelDialog,
-    CreateChannelDialog,
+    DisconnectDialogComponent,
+    ConnectChannelDialogComponent,
+    CreateChannelDialogComponent,
     PreviewDialogComponent,
-    UploadingSnackbar
+    UploadingSnackbarComponent
   ],
   imports: [
     BrowserModule,
@@ -88,11 +88,11 @@ import { PreviewDialogComponent } from './dialog-data/preview-dialog/preview-dia
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    DisconnectDialog,
-    ConnectChannelDialog,
-    CreateChannelDialog,
+    DisconnectDialogComponent,
+    ConnectChannelDialogComponent,
+    CreateChannelDialogComponent,
     PreviewDialogComponent,
-    UploadingSnackbar
+    UploadingSnackbarComponent
   ]
 })
 export class AppModule { }
