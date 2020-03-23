@@ -39,8 +39,8 @@ export class UniversalService {
 
   totalSize(fileData: Array<any>) {
     let total: number = 0;
-    for (let i = 0; i < fileData.length; i++) {
-      total += fileData[i].size;
+    for (const files of fileData) {
+      total += files.size;
     }
     return this.fileSizeConversion(total) as string;
   }
