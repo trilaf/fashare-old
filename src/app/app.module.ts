@@ -37,7 +37,7 @@ import { UploadingSnackbar } from './snackbar-data/uploading-snackbar/uploading-
 import { CookieService } from 'ngx-cookie-service';
 import { SenderService } from './services/sender.service';
 import { DialogService } from './services/dialog.service';
-import { PlayDialog } from './dialog-data/play-dialog/play-dialog.component';
+import { PlayDialogComponent } from './dialog-data/play-dialog/play-dialog.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +48,7 @@ import { PlayDialog } from './dialog-data/play-dialog/play-dialog.component';
     DisconnectDialog,
     ConnectChannelDialog,
     CreateChannelDialog,
-    PlayDialog,
+    PlayDialogComponent,
     UploadingSnackbar
   ],
   imports: [
@@ -91,7 +91,7 @@ import { PlayDialog } from './dialog-data/play-dialog/play-dialog.component';
     DisconnectDialog,
     ConnectChannelDialog,
     CreateChannelDialog,
-    PlayDialog,
+    PlayDialogComponent,
     UploadingSnackbar
   ]
 })
