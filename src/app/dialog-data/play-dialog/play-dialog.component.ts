@@ -1,5 +1,6 @@
-import { Component, Inject } from "@angular/core";
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
     selector: 'play-dialog',
@@ -7,6 +8,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class PlayDialog {
     constructor(
-        @Inject(MAT_DIALOG_DATA) public fileAttr: any
+        @Inject(MAT_DIALOG_DATA) public fileAttr: any,
+        public deviceDetector: DeviceDetectorService
     ) {}
 }

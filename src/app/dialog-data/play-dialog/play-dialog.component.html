@@ -1,10 +1,14 @@
 <h6 mat-dialog-title>{{ fileAttr.name }}</h6>
-<mat-dialog-content>
-    <audio *ngIf="fileAttr.type === 'audio'; else video" [src]="fileAttr.url" preload="metadata" controls>File Not Supported</audio>
-    <ng-template #video>
-        <video [src]="fileAttr.url" preload="metadata" controls>File Not Supported</video>
+<mat-dialog-content style="display: flex; justify-content: center;">
+    <img *ngIf="fileAttr.type === 'image'; else notimage" [src]="fileAttr.url" [alt]="fileAttr.name" width="50%" height="50%">
+    <ng-template #notimage>
+        <audio *ngIf="fileAttr.type === 'audio'; else video" [src]="fileAttr.url" preload="metadata" controls>File Not Supported</audio>
+        <ng-template #video>
+            <video [src]="fileAttr.url" preload="metadata" controls>File Not Supported</video>
+        </ng-template>
     </ng-template>
 </mat-dialog-content>
+<p *ngIf="fileAttr.type === 'image'" style="text-align: center">{{ (deviceDetector.isDesktop()) ? 'Right click the image and choose Save Image As for download the image' : 'Touch and hold the image for download the image' }}</p>
 <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close color="primary">Close</button>
 </mat-dialog-actions>
