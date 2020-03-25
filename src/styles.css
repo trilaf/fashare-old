@@ -74,3 +74,11 @@ span.divider {
 audio, video {
     width: 100%;
 }
+
+.mat-dialog-title {
+    word-break: break-all;
+}
+
+.mat-dialog-container {
+    max-height: 90vh!important;
+}
