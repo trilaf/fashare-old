@@ -9,6 +9,6 @@
     </ng-template>
 </mat-dialog-content>
 <p *ngIf="fileAttr.type === 'image'" style="text-align: center">{{ (deviceDetector.isDesktop()) ? 'Right click the image and choose Save Image As for download the image' : 'Touch and hold the image for download the image' }}</p>
-<mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close color="primary">Close</button>
+<mat-dialog-actions class="preview" align="end">
+    <button mat-raised-button mat-dialog-close color="primary">Close</button>
 </mat-dialog-actions>

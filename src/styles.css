@@ -80,5 +80,14 @@ audio, video {
 }
 
 .mat-dialog-container {
-    max-height: 90vh!important;
+    max-height: 90vh !important;
+}
+
+.mat-dialog-content {
+    max-height: none !important
+}
+
+.mat-dialog-actions.preview {
+    position: sticky;
+    bottom: -24px;
 }
