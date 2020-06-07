@@ -86,7 +86,8 @@ export class SenderService {
 
   writeShortID(shortID: string) {
     const randomRealID = {
-      id: this.fstore.createId()
+      id: this.fstore.createId(),
+      createdAt: new Date().toJSON()
     };
     this.fstore.collection('_shortID').doc<shortChannelID>(shortID).set(randomRealID).then(() => {
       this.id = randomRealID.id;
