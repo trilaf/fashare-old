@@ -66,8 +66,8 @@
           "options": {
             "browserTarget": "fashare:build",
             "ssl": true,
-            "sslKey": "localhost.key",
-            "sslCert": "localhost.crt",
+            "sslKey": "./node_modules/browser-sync/lib/server/certs/server.key",
+            "sslCert": "./node_modules/browser-sync/lib/server/certs/server.crt",
             "open": true
           },
           "configurations": {
