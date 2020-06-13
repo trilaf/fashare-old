@@ -14,7 +14,12 @@ span.divider {
 .buttoncontainer {margin: auto;}
 .container {background: rgb(251, 251, 251); width: auto; color: black; margin-bottom: 5px; padding: 5px;}
 .container.centertext {text-align: center;}
-.center {text-align: center;}
+.center {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
 .mat-tooltip.biggerfont {
     font-size: 13px;
 }
@@ -90,4 +95,12 @@ audio, video {
 .mat-dialog-actions.preview {
     position: sticky;
     bottom: -24px;
+}
+
+.title-page {
+    background: #2B9720;
+    color: #ffffff;
+    text-align: center;
+    font-weight: bolder;
+    margin: 0 0 10px 0;
 }
