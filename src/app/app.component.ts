@@ -13,7 +13,6 @@ import { ReceiverService } from './services/receiver.service';
 
 export class AppComponent implements OnInit {
   title = 'fashare';
-  pageTitle = '';
 
   constructor(
     private senderServ: SenderService,
@@ -30,7 +29,11 @@ export class AppComponent implements OnInit {
       this.senderServ.simpleChannelID = this.cookie.get('CHNL_NAME');
       this.snackbar.open('Checking Session...', '', {duration: 5000});
       this.senderServ.readFileList('check');
-      this.router.navigate(['/sender']);
+      if (this.cookie.get('CHNL_DFLT') === 'text') {
+        this.router.navigate(['/sender/textsharing']);
+      } else {
+        this.router.navigate(['/sender/filesharing']);
+      }
     }
     if (!this.receiverServ.isConnected) {
       if (this.cookie.check('RCVR')) {

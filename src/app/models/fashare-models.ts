@@ -1,8 +1,9 @@
 export interface Data {
-    name: string,
-    size: number,
-    url: any,
-    type: string
+    name: string;
+    size: number;
+    url: any;
+    type: string;
+    contentType: string;
 }
 
 export interface fileList {

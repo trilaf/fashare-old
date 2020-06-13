@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class DialogService {
   idChannel;
   newChannelName;
+  textForUpload;
 
   constructor() {}
 

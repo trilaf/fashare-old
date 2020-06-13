@@ -39,6 +39,8 @@ import { CookieService } from 'ngx-cookie-service';
 import { SenderService } from './services/sender.service';
 import { DialogService } from './services/dialog.service';
 import { PreviewDialogComponent } from './dialog-data/preview-dialog/preview-dialog.component';
+import { TextUploadDialogComponent } from './dialog-data/text-upload-dialog/text-upload-dialog.component';
+import { TextSenderComponent } from './role/text-sender/text-sender/text-sender.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import { PreviewDialogComponent } from './dialog-data/preview-dialog/preview-dia
     ConnectChannelDialogComponent,
     CreateChannelDialogComponent,
     PreviewDialogComponent,
-    UploadingSnackbarComponent
+    UploadingSnackbarComponent,
+    TextUploadDialogComponent,
+    TextSenderComponent
   ],
   imports: [
     BrowserModule,
@@ -94,7 +98,8 @@ import { PreviewDialogComponent } from './dialog-data/preview-dialog/preview-dia
     ConnectChannelDialogComponent,
     CreateChannelDialogComponent,
     PreviewDialogComponent,
-    UploadingSnackbarComponent
+    UploadingSnackbarComponent,
+    TextUploadDialogComponent
   ]
 })
 export class AppModule { }

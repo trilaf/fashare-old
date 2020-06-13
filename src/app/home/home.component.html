@@ -1,15 +1,16 @@
 <div>
     <mat-card style="text-align: center">
         <h3 matLine>Welcome to Fashare</h3>
-        <p>A transfer file web application for any devices. <br/> Choose your role below</p>
+        <p>A web application for sharing a file or text in any devices. <br/> Choose your role below</p>
     </mat-card>
 </div>
 <div class="home-container spacer-top">
     <mat-card class="role-card">
         <h4>Sender</h4>
-        <p>You will be host a channel to store the shared file</p>
+        <p>You will be host a channel for sharing</p>
         <div class="center">
-            <button mat-raised-button color="primary" routerLink="/sender">Go</button>
+            <button mat-raised-button color="primary" matTooltip="File Sharing" matTooltipClass="biggerfont" routerLink="/sender/filesharing">File</button>
+            <button mat-raised-button color="primary" matTooltip="Text Sharing" matTooltipClass="biggerfont" routerLink="/sender/textsharing">Text</button>
         </div>
     </mat-card>
     <mat-card class="role-card">

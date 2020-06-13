@@ -28,7 +28,7 @@ export class SenderComponent implements OnInit {
 
   ngOnInit() {
     this.senderServ.checkCookie();
-    this.appComponent.pageTitle = 'Sender Page';
+    document.cookie = `CHNL_DFLT=file; max-age=${ 3600 * 1000 }; path=/; samesite=None; secure`;
   }
 
 }

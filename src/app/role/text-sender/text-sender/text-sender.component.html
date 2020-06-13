@@ -1,25 +1,23 @@
-<mat-card class="title-page"><h3>File Sharing</h3></mat-card>
+<mat-card class="title-page"><h3>Text Sharing</h3></mat-card>
 
 <div class="container" *ngIf="senderServ.id !== undefined || null; else idNotSet">
-    <p><b>Channel : {{ senderServ.simpleChannelID }}</b> (Uploaded {{ senderServ.fileList.length }} {{ (senderServ.fileList.length > 1) ? 'files': 'file' }} / {{ (senderServ.fileList.length > 0) ? universalServ.totalSize(senderServ.fileList) : '0 bytes' }})</p>
+    <p><b>Channel : {{ senderServ.simpleChannelID }}</b> (Uploaded {{ senderServ.fileList.length }} {{ (senderServ.fileList.length > 1) ? 'texts': 'text' }})</p>
 </div>
 <ng-template #idNotSet>
     <mat-card style="text-align: center">Channel Not Set</mat-card>
 </ng-template>
 
 <div class="list-file-container" *ngIf="senderServ.id !== undefined || null">
-    <mat-card *ngIf="(senderServ.fileList.length === 0) && (senderServ.id !== undefined || null); else list" style="text-align: center;">No File Uploaded</mat-card>
+    <mat-card *ngIf="(senderServ.fileList.length === 0) && (senderServ.id !== undefined || null); else list" style="text-align: center;">No Text Uploaded</mat-card>
     <ng-template #list>
     <mat-list *ngIf="senderServ.fileList.length > 0" style="background-color: white">
         <mat-list-item *ngFor="let list of senderServ.fileList; let i = index">
-            <mat-icon mat-list-icon>{{ universalServ.getIcon(list.type) }}</mat-icon>
-            <h4 mat-line [title]="list.name">{{ list.name }}</h4>
+            <h4 mat-line [title]="list.theText">{{ list.theText }}</h4>
             <div class="dl-btn-wrapper">
-                <a mat-icon-button color="warn" matTooltip="Delete" matTooltipClass="biggerfont" (click)="senderServ.deleteSingleFile(list.id, list.name, i)">
+                <a mat-icon-button color="warn" matTooltip="Delete" matTooltipClass="biggerfont" (click)="senderServ.deleteText(list.id, i)">
                     <mat-icon>delete</mat-icon>
                 </a>
             </div>
-            <p mat-line>{{ universalServ.fileSizeConversion(list.size) }}</p>
             <mat-divider></mat-divider>
         </mat-list-item>
     </mat-list>
@@ -30,11 +28,7 @@
     <div class="buttoncontainer fly">
         <button  *ngIf="senderServ.id == undefined || null; else idCreated" mat-fab matTooltip="Start" matTooltipClass="biggerfont" (click)="senderServ.openCreateChannelDialog()" color="primary"><mat-icon>power_settings_new</mat-icon></button><span class="spacer"></span>
         <ng-template #idCreated>
-            <button *ngIf="!senderServ.isUploading; else cancelBtn" (click)="fileUpload.click()" mat-fab matTooltip="Upload" matTooltipClass="biggerfont" color="primary" [disabled]="senderServ.isLoading || senderServ.isUploading"><mat-icon>cloud_upload</mat-icon></button>
-            <input #fileUpload style="display: none;" type="file" (change)="uploadFile($event)">
-            <ng-template #cancelBtn>
-                <button mat-fab color="accent" matTooltip="Cancel Upload" matTooltipClass="biggerfont" (click)="senderServ.cancelUpload()"><mat-icon>cancel</mat-icon></button>
-            </ng-template>
+            <button (click)="senderServ.openTextUploadDialog()" mat-fab matTooltip="Upload" matTooltipClass="biggerfont" color="primary" [disabled]="senderServ.isLoading || senderServ.isUploading"><mat-icon>cloud_upload</mat-icon></button>
         </ng-template>
         <button *ngIf="!senderServ.isCookieExist; else cookieExist" mat-fab matTooltip="Back" matTooltipClass="biggerfont" routerLink=""><mat-icon>arrow_back</mat-icon></button>
         <ng-template #cookieExist>
@@ -42,4 +36,5 @@
         </ng-template>
     </div>
 </div>
+
 

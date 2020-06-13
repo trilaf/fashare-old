@@ -17,7 +17,7 @@ export class ReceiverComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.appComponent.pageTitle = 'Receiver Page';
+
   }
 
 }

@@ -14,6 +14,7 @@ import { SnackbarService } from './snackbar.service';
 import { Data, shortChannelID } from '../models/fashare-models';
 import { CreateChannelDialogComponent } from '../dialog-data/create-channel-dialog/create-channel-dialog.component';
 import { DialogService } from './dialog.service';
+import { TextUploadDialogComponent } from '../dialog-data/text-upload-dialog/text-upload-dialog.component';
 
 @Injectable({
   providedIn: 'root'
@@ -94,8 +95,6 @@ export class SenderService {
       this.simpleChannelID = shortID;
       document.cookie = `CHNL_ID=${ this.id }; max-age=${ 3600 * 1000 }; path=/; samesite=None; secure`;
       document.cookie = `CHNL_NAME=${ encodeURIComponent(shortID) }; max-age=${ 3600 * 1000 }; path=/; samesite=None; secure`;
-      /* this.cookie.set('CHNL_ID', this.id, 3650, '/', window.location.hostname, true, 'None');
-      this.cookie.set('CHNL_NAME', shortID, 3650, '/', window.location.hostname, true, 'None'); */
       this.isCookieExist = true;
       this.snackbar.open('Channel successfully created', 'X', {duration: 5000});
     }, err => {
@@ -211,7 +210,11 @@ export class SenderService {
 
   readFileList(type?: string) {
     this.firestoreTask = this.fstore.collection<Data>(this.id).snapshotChanges().subscribe(data => {
-      this.fileList = data.map(e => {
+      this.fileList = data.filter(contentType => {
+        const checkDefault = (this.cookie.get('CHNL_DFLT') === 'text') ?
+          contentType.payload.doc.data().contentType === 'text' : contentType.payload.doc.data().contentType !== 'text';
+        return checkDefault;
+      }).map(e => {
         return {
           id: e.payload.doc.id,
           ...e.payload.doc.data()
@@ -227,7 +230,7 @@ export class SenderService {
     });
   }
 
-  disconnectChannel() {
+  disconnectChannel(type?: string) {
     this.snackbar.open('Disconnecting...');
     this.isLoading = true;
     if (this.fileList.length === 0) {
@@ -237,7 +240,19 @@ export class SenderService {
       }).catch(err => {
         console.log(err);
         this.isLoading = false;
-        this.snackbar.open('Failed disconnecting', 'X', {duration: 5000});
+        this.snackbar.open('Failed disconnecting', 'X');
+      });
+    } else if (type === 'text') {
+      console.log('Disconnect type text');
+      this.deleteCollectionAtPath(this.id, 'direct').then(() => {
+        this.deleteCollectionAtPath('_shortID/' + this.simpleChannelID, 'direct', 'done').then(() => {
+          this.isLoading = false;
+          this.snackbar.open('Disconnected', 'X', {duration: 5000});
+        }).catch(err => {
+          console.log(err);
+          this.isLoading = false;
+          this.snackbar.open('Failed disconnecting', 'X');
+        });
       });
     } else {
       this.deleteFileStorage()
@@ -249,7 +264,7 @@ export class SenderService {
           }).catch(err => {
             console.log(err);
             this.isLoading = false;
-            this.snackbar.open('Failed disconnecting', 'X', {duration: 5000});
+            this.snackbar.open('Failed disconnecting', 'X');
           });
         }).catch(err => {
           console.log(err);
@@ -291,10 +306,14 @@ export class SenderService {
     if (this.fileList.length === 0) {
       this.disconnectChannel();
     } else {
-      const dialogRef = this.dialog.open(DisconnectDialogComponent);
+      const dialogRef = this.dialog.open(DisconnectDialogComponent, {
+        data: {
+          chnlType: this.cookie.get('CHNL_DFLT')
+        }
+      });
       dialogRef.afterClosed().subscribe(result => {
         if (result === true) {
-          this.disconnectChannel();
+          this.disconnectChannel((this.cookie.get('CHNL_DFLT') === 'text') ? 'text' : '');
         }
       });
     }
@@ -305,6 +324,15 @@ export class SenderService {
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
         this.checkShortID(this.dialogServ.newChannelName);
+      }
+    });
+  }
+
+  openTextUploadDialog() {
+    const dialogRef = this.dialog.open(TextUploadDialogComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.uploadText(this.dialogServ.textForUpload);
       }
     });
   }
@@ -339,6 +367,8 @@ export class SenderService {
         .then(() => {
           if (cleanUpType === 'single') {
             resolve('File deleted');
+          } else if (cleanUpType === 'text') {
+            resolve('Text deleted');
           } else {
             resolve(this.cleanUpData(cleanUpType));
           }
@@ -364,6 +394,31 @@ export class SenderService {
         }
         resolve();
       }
+    });
+  }
+
+  uploadText(text) {
+    this.snackbar.open('Uploading text...');
+    const data = {
+      contentType: 'text',
+      theText: text
+    };
+    this.fstore.collection(this.id).add(data).then(() => {
+      this.readFileList();
+      this.snackbar.open('Text uploaded', 'OK', {duration: 5000});
+    }).catch(err => {
+      this.snackbar.open('Failed uploading text', 'OK');
+    });
+  }
+
+  deleteText(textID: string, index) {
+    this.snackbar.open('Deleting...');
+    this.deleteCollectionAtPath(this.id + '/' + textID, 'direct', 'text').then(res => {
+      this.fileList.splice(index, 1);
+      this.snackbar.open(res, 'X', {duration: 5000});
+    }).catch(err => {
+      console.log(err);
+      this.snackbar.open('Failed deleting text', 'X');
     });
   }
 

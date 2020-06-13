@@ -19,14 +19,20 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.appComponent.pageTitle = 'Home';
     if (this.cookie.check('CHNL_ID') === true) {
-      this.router.navigate(['/sender']);
+      if (this.cookie.get('CHNL_DFLT') === 'text') {
+        this.router.navigate(['/sender/textsharing']);
+      } else {
+        this.router.navigate(['/sender/filesharing']);
+      }
       this.snackbar.open('You must end session first', 'X', {duration: 5000});
     }
     if (this.cookie.check('RCVR') === true) {
       this.router.navigate(['/receiver']);
       this.snackbar.open('You must disconnect first', 'X', {duration: 5000});
+    }
+    if ((this.cookie.check('CHNL_ID') === false && this.cookie.check('CHNL_DFLT') === true)) {
+      document.cookie = `CHNL_DFLT=""; max-age=-1`;
     }
   }
 
