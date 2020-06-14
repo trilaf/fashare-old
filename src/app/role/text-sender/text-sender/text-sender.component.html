@@ -13,6 +13,7 @@
     <mat-list *ngIf="senderServ.fileList.length > 0" style="background-color: white">
         <mat-list-item *ngFor="let list of senderServ.fileList; let i = index">
             <h4 mat-line [title]="list.theText">{{ list.theText }}</h4>
+            <p matLine style="font-style: italic;">{{ list.theText.length }} {{ (list.theText.length > 1) ? 'characters' : 'character' }}</p>
             <div class="dl-btn-wrapper">
                 <a mat-icon-button color="warn" matTooltip="Delete" matTooltipClass="biggerfont" (click)="senderServ.deleteText(list.id, i)">
                     <mat-icon>delete</mat-icon>

@@ -21,6 +21,7 @@ export class ReceiverService {
   idChannel: string;
   isConnected: boolean;
   isLoading: boolean;
+  channelType: string;
   fileList: Data[] = [];
   dataSubscription: Subscription;
   channelSubscription: Subscription;
@@ -69,6 +70,7 @@ export class ReceiverService {
         this.isLoading = false;
         this.idChannel = shortID;
         realChannelID = data.get('id');
+        this.channelType = data.get('channelType');
         this.getFileList(realChannelID, 'connect');
         this.channelListener(shortID);
         document.cookie = 'RCVR=1; path=/; samesite=none; secure';

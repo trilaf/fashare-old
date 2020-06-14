@@ -88,7 +88,8 @@ export class SenderService {
   writeShortID(shortID: string) {
     const randomRealID = {
       id: this.fstore.createId(),
-      createdAt: new Date().toJSON()
+      createdAt: new Date().toJSON(),
+      channelType: this.cookie.get('CHNL_DFLT')
     };
     this.fstore.collection('_shortID').doc<shortChannelID>(shortID).set(randomRealID).then(() => {
       this.id = randomRealID.id;

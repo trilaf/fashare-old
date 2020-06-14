@@ -1,29 +1,45 @@
 <div class="container centertext">
     <p *ngIf="!receiverServ.isConnected; else connected">Not Connected</p>
     <ng-template #connected>
-        <p>Connected to <strong>{{ receiverServ.idChannel }}</strong> (Loaded {{ receiverServ.fileList.length }} {{ (receiverServ.fileList.length > 1) ? 'files' : 'file' }})</p>
+        <ng-template [ngIf]="receiverServ.channelType === 'file'">
+            <p>Connected to <strong>{{ receiverServ.idChannel }}</strong> (Loaded {{ receiverServ.fileList.length }} {{ (receiverServ.fileList.length > 1) ? 'files' : 'file' }})</p>
+        </ng-template>
+        <ng-template [ngIf]="receiverServ.channelType === 'text'">
+            <p>Connected to <strong>{{ receiverServ.idChannel }}</strong> (Loaded {{ receiverServ.fileList.length }} {{ (receiverServ.fileList.length > 1) ? 'texts' : 'text' }})</p>
+        </ng-template>
     </ng-template>
 </div>
 
 <div class="list-file-container" *ngIf="receiverServ.isConnected">
 <mat-card *ngIf="receiverServ.isConnected && (receiverServ.fileList.length === 0); else fileExist" style="text-align: center">No File</mat-card>
     <ng-template #fileExist>
-        <mat-list style="background-color: white" *ngIf="receiverServ.fileList.length !== 0">
-            <mat-list-item *ngFor="let file of receiverServ.fileList">
-                <mat-icon matListIcon>{{ universalServ.getIcon(file.type) }}</mat-icon>
-                <h6 matLine [title]="file.name">{{ file.name }}</h6>
-                <div class="dl-btn-wrapper">
-                    <a mat-icon-button *ngIf="receiverServ.displayPreviewButton(file.type)" color="primary" matTooltip="Preview" matTooltipClass="biggerfont" (click)="receiverServ.openPlayDialog(file.type, file.name, file.url)">
-                        <mat-icon>{{ receiverServ.getIconForButtonPreview(file.type) }}</mat-icon>
-                    </a>
-                    <a mat-icon-button *ngIf="receiverServ.displayDownloadButton(file.type)" color="primary" matTooltip="Download" target="_blank" matTooltipClass="biggerfont" [href]="file.url" download>
-                        <mat-icon>cloud_download</mat-icon>
-                    </a>
-                </div>
-                <p matLine>{{ universalServ.fileSizeConversion(file.size) }}</p>
-                <mat-divider></mat-divider>
-            </mat-list-item>
-        </mat-list>
+        <ng-template [ngIf]="receiverServ.channelType === 'file'">
+            <mat-list style="background-color: white" *ngIf="receiverServ.fileList.length !== 0">
+                <mat-list-item *ngFor="let file of receiverServ.fileList">
+                    <mat-icon matListIcon>{{ universalServ.getIcon(file.type) }}</mat-icon>
+                    <h6 matLine [title]="file.name">{{ file.name }}</h6>
+                    <div class="dl-btn-wrapper">
+                        <a mat-icon-button *ngIf="receiverServ.displayPreviewButton(file.type)" color="primary" matTooltip="Preview" matTooltipClass="biggerfont" (click)="receiverServ.openPlayDialog(file.type, file.name, file.url)">
+                            <mat-icon>{{ receiverServ.getIconForButtonPreview(file.type) }}</mat-icon>
+                        </a>
+                        <a mat-icon-button *ngIf="receiverServ.displayDownloadButton(file.type)" color="primary" matTooltip="Download" target="_blank" matTooltipClass="biggerfont" [href]="file.url" download>
+                            <mat-icon>cloud_download</mat-icon>
+                        </a>
+                    </div>
+                    <p matLine>{{ universalServ.fileSizeConversion(file.size) }}</p>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+            </mat-list>
+        </ng-template>
+        <ng-template [ngIf]="receiverServ.channelType === 'text'">
+            <mat-list style="background-color: white" *ngIf="receiverServ.fileList.length !== 0">
+                <mat-list-item *ngFor="let list of receiverServ.fileList">
+                    <h6 matLine [title]="list.theText">{{ list.theText }}</h6>
+                    <p matLine style="font-style: italic;">{{ list.theText.length }} {{ (list.theText.length > 1) ? 'characters' : 'character' }}</p>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+            </mat-list>
+        </ng-template>
     </ng-template>
 </div>
 
