@@ -32,6 +32,8 @@
         <ng-template #idCreated>
             <button *ngIf="!senderServ.isUploading; else cancelBtn" (click)="fileUpload.click()" mat-fab matTooltip="Upload" matTooltipClass="biggerfont" color="primary" [disabled]="senderServ.isLoading || senderServ.isUploading"><mat-icon>cloud_upload</mat-icon></button>
             <input #fileUpload style="display: none;" type="file" (change)="uploadFile($event)">
+            <span class="spacer"></span>
+            <button (click)="senderServ.switchChannelType('file')" mat-fab matTooltip="Switch to Text Sharing" matTooltipClass="biggerfont" color="primary" [disabled]="senderServ.isLoading || senderServ.isUploading"><mat-icon>swap_horiz</mat-icon></button>
             <ng-template #cancelBtn>
                 <button mat-fab color="accent" matTooltip="Cancel Upload" matTooltipClass="biggerfont" (click)="senderServ.cancelUpload()"><mat-icon>cancel</mat-icon></button>
             </ng-template>

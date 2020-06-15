@@ -30,6 +30,8 @@
         <button  *ngIf="senderServ.id == undefined || null; else idCreated" mat-fab matTooltip="Start" matTooltipClass="biggerfont" (click)="senderServ.openCreateChannelDialog()" color="primary"><mat-icon>power_settings_new</mat-icon></button><span class="spacer"></span>
         <ng-template #idCreated>
             <button (click)="senderServ.openTextUploadDialog()" mat-fab matTooltip="Upload" matTooltipClass="biggerfont" color="primary" [disabled]="senderServ.isLoading || senderServ.isUploading"><mat-icon>cloud_upload</mat-icon></button>
+            <span class="spacer"></span>
+            <button (click)="senderServ.switchChannelType('text')" mat-fab matTooltip="Switch to File Sharing" matTooltipClass="biggerfont" color="primary" [disabled]="senderServ.isLoading || senderServ.isUploading"><mat-icon>swap_horiz</mat-icon></button>
         </ng-template>
         <button *ngIf="!senderServ.isCookieExist; else cookieExist" mat-fab matTooltip="Back" matTooltipClass="biggerfont" routerLink=""><mat-icon>arrow_back</mat-icon></button>
         <ng-template #cookieExist>

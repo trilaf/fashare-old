@@ -400,12 +400,14 @@ export class SenderService {
 
   uploadText(text) {
     this.snackbar.open('Uploading text...');
+    this.isUploading = true;
     const data = {
       contentType: 'text',
       theText: text
     };
     this.fstore.collection(this.id).add(data).then(() => {
       this.readFileList();
+      this.isUploading = false;
       this.snackbar.open('Text uploaded', 'OK', {duration: 5000});
     }).catch(err => {
       this.snackbar.open('Failed uploading text', 'OK');
@@ -420,6 +422,30 @@ export class SenderService {
     }).catch(err => {
       console.log(err);
       this.snackbar.open('Failed deleting text', 'X');
+    });
+  }
+
+  switchChannelType(currentType: string) {
+    this.snackbar.open('Switching to ' + (currentType === 'text' ? 'file' : 'text') + ' sharing...');
+    let switchTo: string;
+    if (currentType === 'file') {
+      switchTo = 'text';
+    } else if (currentType === 'text') {
+      switchTo = 'file';
+    }
+    this.fstore.collection('_shortID').doc(this.simpleChannelID).update({
+      channelType: switchTo
+    }).then(res => {
+      this.fileList = [];
+      if (switchTo === 'text') {
+        this.router.navigate(['/sender/textsharing']);
+      } else if (switchTo === 'file') {
+        this.router.navigate(['/sender/filesharing']);
+      }
+      this.readFileList();
+      this.snackbar.open('Switching success', 'OK', {duration: 5000});
+    }).catch(err => {
+      this.snackbar.open('Failed switching channel', 'OK');
     });
   }
 
