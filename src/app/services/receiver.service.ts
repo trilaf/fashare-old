@@ -66,11 +66,11 @@ export class ReceiverService {
         this.isLoading = false;
       } else {
         this.snackbar.open('Connected', 'OK', {duration: 5000});
+        this.channelType = data.get('channelType');
         this.isConnected = true;
         this.isLoading = false;
         this.idChannel = shortID;
         realChannelID = data.get('id');
-        this.channelType = data.get('channelType');
         this.getFileList(realChannelID, 'connect');
         this.channelListener(shortID);
         document.cookie = 'RCVR=1; path=/; samesite=none; secure';
@@ -84,7 +84,11 @@ export class ReceiverService {
   getFileList(idCH: string, type?: string) {
     this.snackbar.open('Fetching list of data....');
     this.dataSubscription = this.fstore.collection<Data>(idCH).snapshotChanges().subscribe(data => {
-      this.fileList = data.map(e => {
+      this.fileList = data.filter(channelType => {
+        const checkDefault = (this.channelType === 'text') ?
+        channelType.payload.doc.data().contentType === 'text' : channelType.payload.doc.data().contentType !== 'text';
+        return checkDefault;
+      }).map(e => {
         return {
           id: e.payload.doc.id,
           ...e.payload.doc.data()
@@ -92,6 +96,10 @@ export class ReceiverService {
       });
       if (type === 'connect') {
         this.snackbar.open('Successfully fetched', 'OK', {duration: 5000});
+        type = '';
+      }
+      if (type === 'channel-switched') {
+        this.snackbar.open('Channel switched to ' + this.channelType + ' sharing', 'OK');
         type = '';
       }
     }, err => {
@@ -121,6 +129,10 @@ export class ReceiverService {
     this.channelSubscription = this.fstore.collection('_shortID').doc(shortID).snapshotChanges().subscribe(snapshot => {
       if (snapshot.payload.get('id') === undefined) {
         this.disconnectChannel('endedByHost');
+      }
+      if (snapshot.payload.get('channelType') !== this.channelType) {
+        this.channelType = snapshot.payload.get('channelType');
+        this.getFileList(snapshot.payload.get('id'), 'channel-switched');
       }
     });
   }
