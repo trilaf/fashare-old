@@ -110,3 +110,21 @@ audio, video {
     font-weight: bolder;
     margin: 0 0 10px 0;
 }
+
+.box-logo-header {
+    padding: 10px 0 10px 0;
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    box-sizing: content-box;
+}
+
+.logo-header {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    display: block;
+}
+
+.title-header {
+    font-family: 'Lato', sans-serif !important;
+}
