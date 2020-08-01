@@ -87,8 +87,8 @@ import { TextSenderComponent } from './role/text-sender/text-sender/text-sender.
     SenderService,
     DialogService,
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
       panelClass: ['margin-snackbar']
     }}
   ],
