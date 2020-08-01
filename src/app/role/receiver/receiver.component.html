@@ -33,8 +33,13 @@
         </ng-template>
         <ng-template [ngIf]="receiverServ.channelType === 'text'">
             <mat-list style="background-color: white" *ngIf="receiverServ.fileList.length !== 0">
-                <mat-list-item *ngFor="let list of receiverServ.fileList">
-                    <h6 matLine [title]="list.theText">{{ list.theText }}</h6>
+                <mat-list-item *ngFor="let list of receiverServ.fileList; let i = index">
+                    <h6 id="textcontent" matLine [title]="list.theText">{{ list.theText }}</h6>
+                    <div class="dl-btn-wrapper">
+                        <a mat-icon-button="" color="primary" matTooltip="Copy" matTooltipClass="biggerfont" (click)="receiverServ.copyText(i)">
+                            <mat-icon>content_copy</mat-icon>
+                        </a>
+                    </div>
                     <p matLine style="font-style: italic;">{{ list.theText.length }} {{ (list.theText.length > 1) ? 'characters' : 'character' }}</p>
                     <mat-divider></mat-divider>
                 </mat-list-item>

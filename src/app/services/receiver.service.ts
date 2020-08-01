@@ -228,4 +228,16 @@ export class ReceiverService {
     }
   }
 
+  copyText(index: number) {
+    const textElement = document.querySelectorAll('#textcontent')[index];
+    const select = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(textElement);
+    select.removeAllRanges();
+    select.addRange(range);
+    document.execCommand('copy');
+    select.removeAllRanges();
+    this.snackbar.open('Text copied', 'X', {duration: 5000});
+  }
+
 }
